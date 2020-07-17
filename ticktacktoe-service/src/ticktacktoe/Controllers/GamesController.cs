@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ticktacktoe.Games;
 
 namespace ticktacktoe.Controllers
 {
@@ -11,10 +12,23 @@ namespace ticktacktoe.Controllers
     [ApiController]
     public class GamesController : ControllerBase
     {
-        [HttpGet]
-        public string Hello()
+        private IGamesService gamesService;
+
+        public GamesController(IGamesService gamesService)
         {
-            return "world";
+            this.gamesService = gamesService;
+        }
+
+        [HttpGet("newGame")]
+        public string NewGame()
+        {
+            return this.gamesService.Create();
+        }
+
+        [HttpGet("newGame/{id}")]
+        public Game GetGame(string id)
+        {
+            return this.gamesService.Get(id);
         }
     }
 }

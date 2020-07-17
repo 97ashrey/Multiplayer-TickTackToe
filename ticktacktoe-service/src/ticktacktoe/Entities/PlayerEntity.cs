@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 
 namespace ticktacktoe.Entities
 {
-    public class Player
+    public class PlayerEntity : IEntity
     {
-        public string ConnectionID { get; set; }
+        public string Id { get; set; }
 
         public string Name { get; set; }
 
-        public int Score { get; set; } = 0;
+        public string Move { get; set; }
+
+        public bool Connected { get; set; }
     }
 }
