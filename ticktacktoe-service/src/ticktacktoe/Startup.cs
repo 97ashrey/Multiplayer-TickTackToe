@@ -1,14 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ticktacktoe.AutoMapperProfiles;
+using ticktacktoe.Games;
 using ticktacktoe.Hubs;
+using ticktacktoe.JsonConverters;
+using ticktacktoe.Repsitories;
 
 namespace ticktacktoe
 {
@@ -37,8 +43,21 @@ namespace ticktacktoe
                     });
             });
 
-            services.AddControllers();
-            services.AddSignalR();
+            services.AddControllers().AddJsonOptions(options => {
+                options.JsonSerializerOptions.Converters.Add(new ScoreJsonConverter());
+            });
+
+            services.AddSignalR().AddJsonProtocol(options => {
+                options.PayloadSerializerOptions.Converters.Add(new ScoreJsonConverter());
+            });
+
+            services.AddAutoMapper(typeof(DefaultProfile));
+
+            services.AddSingleton<IGamesRepository>(
+                (services) => 
+                new GamesRepository(new System.Collections.Concurrent.ConcurrentDictionary<string, Entities.GameEntity>()));
+            services.AddSingleton<GamesService>();
+            services.AddSingleton<IGamesService, GamesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

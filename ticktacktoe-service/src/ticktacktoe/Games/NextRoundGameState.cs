@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ticktacktoe.Entities
+namespace ticktacktoe.Games
 {
-    public class GameState
+    public class NextRoundGameState
     {
-        public Guid ID { get; set; }
-
         public List<Player> Players { get; set; }
 
         public Player CurrentPlayer { get; set; }
 
-        public List<string> Board { get; set; }
+        public string[] Board { get; set; }
+
+        public bool RoundOver { get; set; }
+
+        public int Round { get; set; }
     }
 }
