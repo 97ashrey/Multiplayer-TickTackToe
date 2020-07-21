@@ -1,1 +1,13 @@
-<p>home-page works!</p>
+<div class="container">
+    <div class="gameBanner">
+        <span class="text">Tick Tack Toe</span>
+    </div>
+    
+    <button class="newGameButton" (click)="newGameClickHandler()">New Game</button>
+    
+    <div class="gameLink">
+        <!-- <span class="link" contenteditable="true" readonly="true">{{ gameLink | async }}</span> -->
+        <input #link type="text" class="link" readonly="true" value="{{ gameLink | async }}">
+        <button class="copyButton" (click)="copyClickHandler()">copy</button>
+    </div>
+</div>

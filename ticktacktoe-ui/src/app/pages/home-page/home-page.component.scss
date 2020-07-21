@@ -1,0 +1,101 @@
+$green: #5cb85c;
+$dark-green: #4c974c;
+
+.container {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media screen and (min-width: 1024px) {
+    .container {
+        width: 50%;
+        height: 100vh;
+       
+        margin: 0 auto;
+    }
+}
+
+.gameBanner {
+    .text {
+        font-size: 3em;
+        color: white;
+    }
+    margin: 10px 0px;
+}
+
+@media screen and (min-width: 1024px) {
+    .gameBanner {
+        .text {
+            font-size: 5em;
+        }
+    }
+}
+
+button {
+    outline: none;
+    border: none;
+    border-radius: 10px;
+
+    background-color: $green;
+
+    color: white;
+
+    cursor: pointer;
+
+    &:hover {
+        background-color: $dark-green;
+    }
+
+    &:active {
+        background-color: $green;
+    }
+}
+
+.newGameButton {
+    width: 120px;
+    height: 60px;
+
+    font-size: 1.1em;
+
+    margin-bottom: 10px;
+}
+
+.gameLink {
+    display: flex;
+    align-items: center;
+
+    width: 60%;
+    height: 40px;
+    
+    background-color: white;
+
+    .link {
+        flex: 0.9;
+        height: 100%;
+
+        outline: none;
+        border: none;
+
+        text-align: center;
+
+        border: 3px solid;
+        border-color: transparent;
+
+        &:focus {
+            border-color: $green;
+        }
+    }
+
+    .copyButton {
+        display: block;
+
+        flex: 0.1;
+        height: 100%;
+
+        border-radius: 0px;
+    }
+}
