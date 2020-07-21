@@ -20,15 +20,16 @@ namespace ticktacktoe.Controllers
         }
 
         [HttpGet("newGame")]
-        public string NewGame()
+        public IActionResult NewGame()
         {
-            return this.gamesService.Create();
+            return Ok(new { GameId = this.gamesService.Create() });
+
         }
 
-        [HttpGet("newGame/{id}")]
-        public Game GetGame(string id)
+        [HttpGet("{id}")]
+        public IActionResult GetGame(string id)
         {
-            return this.gamesService.Get(id);
+            return Ok(this.gamesService.Get(id));
         }
     }
 }
