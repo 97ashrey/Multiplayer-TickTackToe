@@ -1,2 +1,2 @@
-<input type="text" class="playerName green">
-<button class="success createPlayer">Play</button>
+<input type="text" class="playerName green" [(ngModel)]="playerName" required>
+<button class="success createPlayer" (click)="createPlayerHandler()">{{createButtonText}}</button>
