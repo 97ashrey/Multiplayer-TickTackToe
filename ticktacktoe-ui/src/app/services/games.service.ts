@@ -27,7 +27,7 @@ export class GamesService {
       const protocol = location.protocol;
       const hostName = location.hostname;
       const portName = location.port;
-      return `${protocol}//${hostName}:${portName}/game/${respone.gameId}`;
+      return `${protocol}//${hostName}:${portName}/games/${respone.gameId}`;
     }));
   }
 }

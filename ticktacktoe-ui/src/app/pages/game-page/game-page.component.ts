@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { PlayerStorageService} from '../../services/player-storage.service';
+import { PlayerCreatedEvent } from 'src/app/events/player-created.event';
 
 @Component({
   selector: 'app-game-page',
@@ -10,10 +12,10 @@ export class GamePageComponent implements OnInit {
 
   public gameId: string;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.gameId = this.route.snapshot.paramMap.get('gameId');
   }
-
 }
