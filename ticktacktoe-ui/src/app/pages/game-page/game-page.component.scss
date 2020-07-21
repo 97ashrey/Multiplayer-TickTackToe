@@ -1,0 +1,51 @@
+:host {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (min-width: 1024px) {
+    :host {
+        width: 50%;
+        height: 100vh;
+       
+        margin: 0 auto;
+    }
+}
+
+.createPlayerContainer {
+    width: 60%;
+    height: 40px;
+
+    margin-bottom: 10px;
+}
+
+.game {
+    width: 100%;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+
+    .board {
+        flex: 0.7;
+        height: 100%;
+        border: 10px solid red;
+    }
+
+    .chat {
+        flex: 0.3;
+        height: 100%;
+        border: 10px solid white;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .game {
+        display: flex;
+        flex-direction: row;
+    }
+}

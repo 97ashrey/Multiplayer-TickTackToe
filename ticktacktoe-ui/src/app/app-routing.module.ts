@@ -8,7 +8,7 @@ import { GamePageComponent } from './pages/game-page/game-page.component';
 const routes: Routes = [
     { path: 'home', component: HomePageComponent },
     { path: '', component: HomePageComponent },
-    { path: 'game/:gameId', component: GamePageComponent }
+    { path: 'games/:gameId', component: GamePageComponent }
 ]; 
 
 // configures NgModule imports and exports
