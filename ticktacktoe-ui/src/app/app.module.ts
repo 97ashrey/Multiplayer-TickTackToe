@@ -7,7 +7,6 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { GamePageComponent } from './pages/game-page/game-page.component';
-import { CreatePlayerComponent } from './components/create-player/create-player.component';
 import { GameComponent } from './components/game/game.component';
 
 @NgModule({
@@ -15,7 +14,6 @@ import { GameComponent } from './components/game/game.component';
     AppComponent,
     HomePageComponent,
     GamePageComponent,
-    CreatePlayerComponent,
     GameComponent
   ],
   imports: [

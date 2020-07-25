@@ -1,7 +1,8 @@
 <p>{{gameId}}</p>
 
 <div class="createPlayerContainer">
-    <app-create-player createButtonText="Play" (playerCreated)="playerCreatedHandler($event)"></app-create-player>
+    <input type="text" class="playerName green" [(ngModel)]="playerName" required>
+    <button class="success createPlayer" (click)="playHandler()">Play</button>
 </div>
 <div class="game">
     <div class="board">

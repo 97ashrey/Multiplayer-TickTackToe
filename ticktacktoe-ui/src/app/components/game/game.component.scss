@@ -12,6 +12,16 @@
     height: 40px;
 
     margin-bottom: 10px;
+
+    display: flex;
+
+    input.playerName {
+        flex: 0.7;
+    }
+
+    button.createPlayer {
+        flex: 0.3;
+    }
 }
 
 .game {
