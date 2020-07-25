@@ -33,7 +33,16 @@
     .board {
         flex: 0.7;
         height: 100%;
+
         border: 10px solid red;
+
+        display: flex;
+        flex-wrap: wrap;
+
+        button {
+            width: 33.33%;
+            font-size: 1.2em;
+        }
     }
 
     .chat {

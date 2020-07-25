@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TickTackToeServiceHostResolverService } from './tick-tack-toe-service-host-resolver.service';
+import { GameConnection } from './game-connection/game-connection';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -19,7 +20,7 @@ export class GamesService {
     private httpClient: HttpClient, 
     private tickTackToeServiceHostResolver: TickTackToeServiceHostResolverService) {
       this.hostUrl = this.tickTackToeServiceHostResolver.getUrl();
-     }
+    }
 
   public newGame(): Observable<string> {
     return this.httpClient.get<{gameId: string}>(`${this.hostUrl}${gamesServiceRoutes.newGame}`)
@@ -29,5 +30,9 @@ export class GamesService {
       const portName = location.port;
       return `${protocol}//${hostName}:${portName}/games/${respone.gameId}`;
     }));
+  }
+
+  public getGameConnection(gameId: string, playerId: string, playerName: string) {
+    return new GameConnection(this.hostUrl, gameId, playerId, playerName);
   }
 }

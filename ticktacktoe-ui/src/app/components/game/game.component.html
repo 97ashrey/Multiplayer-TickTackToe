@@ -4,12 +4,19 @@
     <input type="text" class="playerName green" [(ngModel)]="playerName" required>
     <button class="success createPlayer" (click)="playHandler()">Play</button>
 </div>
-<div class="game">
-    <div class="board">
-        
+<div *ngIf="gameState" >
+    <div>{{gameState.round}}</div>
+    <div>
+        <span>{{gameState.players[0].name}}</span> : <span>{{gameState.score[gameState.players[0].name]}}</span>&nbsp;
+        <span>{{gameState.players[1].name}}</span> : <span>{{gameState.score[gameState.players[1].name]}}</span>
     </div>
-    <div class="chat">
-
+    <div class="game">
+        <div class="board">
+            <button *ngFor="let field of gameState.board; let i = index" (click)="fieldClickHandler(i)">{{field}}</button>
+        </div>
+        <div class="chat">
+    
+        </div>
     </div>
 </div>
 
