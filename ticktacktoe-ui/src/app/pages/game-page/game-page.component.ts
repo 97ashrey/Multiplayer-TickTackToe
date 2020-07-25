@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PlayerStorageService} from '../../services/player-storage.service';
-import { PlayerCreatedEvent } from 'src/app/events/player-created.event';
 
 @Component({
   selector: 'app-game-page',
