@@ -7,8 +7,8 @@
     }"></ng-container>
 <div class="stats">
     <div class="turn">
-        <div class="checkBox" [class.checked]="thisClientPlayer.id === currentPlayer.id"></div>
-        <div class="checkBox" [class.checked]="otherClientPlayer.id === currentPlayer.id"></div>
+        <ng-container *ngTemplateOutlet="checkBox; context: thisClientPlayer"></ng-container>
+        <ng-container *ngTemplateOutlet="checkBox; context: otherClientPlayer"></ng-container>
     </div>
     <div class="round">
         <span>Round</span>
@@ -32,4 +32,11 @@
         </div>
         <span class="scoreValue">{{score}}</span>
     </div>
+</ng-template>
+
+<ng-template #checkBox let-id="id" let-move="move">
+    <div class="checkBox" 
+        [class.checked]="id === currentPlayer.id"
+        [class.playerx]="move === 'X'"
+        [class.playero]="move === 'O'"></div>
 </ng-template>
