@@ -1,0 +1,35 @@
+<ng-container 
+    *ngTemplateOutlet="playerInfo;context: 
+    {   
+        name: thisClientPlayer.name, 
+        move: thisClientPlayer.move, 
+        score: score[thisClientPlayer.name]
+    }"></ng-container>
+<div class="stats">
+    <div class="turn">
+        <div class="checkBox" [class.checked]="thisClientPlayer.id === currentPlayer.id"></div>
+        <div class="checkBox" [class.checked]="otherClientPlayer.id === currentPlayer.id"></div>
+    </div>
+    <div class="round">
+        <span>Round</span>
+        <span class="value">{{round}}</span>
+    </div>
+</div>
+<ng-container 
+    *ngTemplateOutlet="playerInfo;context: 
+    {   
+        name: otherClientPlayer.name, 
+        move: otherClientPlayer.move, 
+        score: score[otherClientPlayer.name]
+    }"></ng-container>
+
+<ng-template #playerInfo let-name="name" let-move="move" let-score="score">
+    <div class="playerInfo">
+        <div>
+            <span>{{name}}</span>
+            &nbsp;
+            <span>{{move}}</span>
+        </div>
+        <span class="scoreValue">{{score}}</span>
+    </div>
+</ng-template>

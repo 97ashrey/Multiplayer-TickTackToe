@@ -13,15 +13,15 @@ export class PlayerStorageService {
 
   constructor() { }
 
-  public getPlayer() : PlayerModel {
+  public getPlayer(gameId: string) : PlayerModel {
     return {
-      id: sessionStorage.getItem(SessionStorageKeys.PLAYER_ID),
+      id: sessionStorage.getItem(`${SessionStorageKeys.PLAYER_ID}.${gameId}`),
       name: localStorage.getItem(SessionStorageKeys.PLAYER_NAME)
     }
   }
 
-  public setPlayer(player: PlayerModel) : void {
-    sessionStorage.setItem(SessionStorageKeys.PLAYER_ID, player.id);
+  public setPlayer(gameId: string, player: PlayerModel) : void {
+    sessionStorage.setItem(`${SessionStorageKeys.PLAYER_ID}.${gameId}`, player.id);
     localStorage.setItem(SessionStorageKeys.PLAYER_NAME, player.name);
   }
 }
