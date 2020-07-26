@@ -18,9 +18,29 @@ export class GameComponent implements OnInit {
 
   public playerName = '';
 
+  public currentClientPlayer: PlayerModel = {
+    id: '1',
+    name: 'Player1'
+  };
+
   private gameConnection: GameConnection;
 
-  public gameState: GameState;
+  public gameState: GameState
+   = {
+    id: '123',
+    players: [
+      {id: '1', name: 'Player1', move: 'X'},
+      {id: '2', name: 'Player2', move: 'O'}
+    ],
+    currentPlayer: {id: '1', name: 'Player1', move: 'X'},
+    board: ["X","X","X","X","X","X","X","X","X"],
+    round: 1,
+    roundOver: false,
+    score: {
+      Player1: 1,
+      Player2: 2
+    }
+  };
 
   constructor(
     private playerStorageService: PlayerStorageService,
@@ -37,9 +57,12 @@ export class GameComponent implements OnInit {
       return;
     }
 
-    this.playerStorageService.setPlayer(player)
-
+    this.playerStorageService.setPlayer(this.gameId, player);
     this.connectToGame(player);
+  }
+
+  public fieldClickHandler(fieldPosition: number): void {
+    this.gameConnection.doMove(fieldPosition);
   }
 
   private createPlayer(): PlayerModel {
@@ -54,7 +77,6 @@ export class GameComponent implements OnInit {
   }
 
   private connectToGame (player: PlayerModel): void {
-    console.log(player);
     this.gameConnection = this.gamesService.getGameConnection(this.gameId, player.id, player.name);
 
     this.gameConnection.onPlayersConnected(gameState => {
@@ -92,13 +114,16 @@ export class GameComponent implements OnInit {
     });
 
     this.gameConnection.start(
-      () => console.log('Connection started'),
+      () => {
+        console.log('Connection started')
+        this.currentClientPlayer = player;
+      },
       error => console.log('Error Occured', error)
     );
   }
 
   private processPlayerInfoFromStorage() : void {
-    const player = this.playerStorageService.getPlayer();
+    const player = this.playerStorageService.getPlayer(this.gameId);
     this.playerName = player.name || '';
 
     if (player.id !== null) {
@@ -106,7 +131,4 @@ export class GameComponent implements OnInit {
     }
   }
 
-  public fieldClickHandler(fieldPosition: number): void {
-    this.gameConnection.doMove(fieldPosition);
-  }
 }
