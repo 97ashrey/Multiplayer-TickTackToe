@@ -1,0 +1,190 @@
+@import '../../../styles/colors.scss';
+
+$field-gap: 10px;
+$dark-x-color: darken($color: $x-color, $amount: 10);
+$dark-o-color: darken($color: $o-color, $amount: 10);
+
+:host {
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+
+    position: relative;
+}
+
+.board {
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    gap: $field-gap;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr); 
+}
+
+.field {
+    border: none;
+    outline: none;
+
+    background-color: $secondary-color;
+
+    border-radius: 5px;
+
+    font-size: 3em;
+    font-weight: bold;
+    font-family: cursive;
+    color: rgba(255, 255, 255, 0.377);
+
+    user-select: none;
+
+    &:hover {
+        cursor: not-allowed;
+    }
+
+    &[thisClientTurn="true"]{
+        &[value=""] {
+            &:hover {
+                cursor: pointer;
+            }
+
+            &[move="X"] {
+                &:hover {
+                    background-color: $dark-x-color;
+                }
+
+                &:active {
+                    background-color: $x-color;
+                }
+            }
+    
+            &[move="O"] {
+
+                &:hover {
+                    background-color: $dark-o-color;
+                }
+
+                &:active {
+                    background-color: $o-color;
+                }
+            }
+        }
+    }
+
+    &[value="X"] {
+        background-color: $x-color;
+
+        &:hover {
+            background-color: $x-color;
+        }
+    }
+
+    &[value="O"] {
+        background-color: $o-color;
+
+        &:hover {
+            background-color: $o-color;
+        }
+    }
+}
+
+$line-width: 10px;
+
+.lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    gap: $field-gap;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+
+    [class^="row"] {
+        display: flex;
+        align-items: center;
+        
+        grid-column: 1 / 4;
+
+        &[class$="-1"] {
+            grid-row: 1;
+        }
+
+        &[class$="-2"] {
+            grid-row: 2;
+        }
+
+        &[class$="-3"] {
+            grid-row: 3;
+        }
+
+        svg {
+            width: 100%;
+            height: $line-width;
+        }
+    }
+
+    [class^="col"] {
+        display: flex;
+        justify-content: center;
+        
+        grid-row: 1 / 4;
+
+        &[class$="-1"] {
+            grid-column: 1;
+        }
+
+        &[class$="-2"] {
+            grid-column: 2;
+        }
+
+        &[class$="-3"] {
+            grid-column: 3;
+        }
+
+        svg {
+            width: $line-width;
+            height: 100%;
+        }
+    }
+
+    .diag, .inv-diag {
+        grid-column: 1 / 4;
+        grid-row: 1 / 4;
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    line {
+        fill: none;
+        stroke: $dark-o-color;
+        &[move="X"] {
+            stroke: $dark-x-color;
+        }
+        stroke-width: $line-width;
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+
+        animation: draw-line 2s linear forwards;
+
+        @keyframes draw-line {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+    }
+}
+
+
+

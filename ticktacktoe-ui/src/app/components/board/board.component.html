@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="board">
+        <button
+        *ngFor="let field of board; let fieldPosition = index"    
+        class="field"
+        attr.move="{{thisClientPlayerId === currentPlayerId? currentPlayerMove: ''}}"
+        attr.value="{{field}}"
+        attr.line-position="{{linePosition? linePosition: ''}}"
+        attr.thisClientTurn="{{thisClientPlayerId === currentPlayerId}}"
+    
+        (click)="fieldClickHandler(fieldPosition)"
+        >{{field}}</button>
+    </div>
+    <div *ngIf="linePosition" class="lines">
+        <div class="{{linePosition}}">
+            <svg>
+                <line attr.move="{{currentPlayerMove}}" *ngIf="linePosition.startsWith('row')" x1="5%" y1="5px" x2="95%" y2="5px" />
+                <line attr.move="{{currentPlayerMove}}" *ngIf="linePosition.startsWith('col')" x1="5px" y1="5%" x2="5px" y2="95%"/>
+                <line attr.move="{{currentPlayerMove}}" *ngIf="linePosition === 'diag'"  x1="5%" y1="5%" x2="95%" y2="95%" />
+                <line attr.move="{{currentPlayerMove}}" *ngIf="linePosition === 'inv-diag'" class="invDiag" x1="5%" y1="95%" x2="95%" y2="5%"/>
+            </svg>
+        </div>
+    </div>
+</div>

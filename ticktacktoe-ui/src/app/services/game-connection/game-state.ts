@@ -8,4 +8,5 @@ export interface GameState {
     roundOver: boolean;
     round: number;
     score: any;
+    lineThrough?: string;
 }
