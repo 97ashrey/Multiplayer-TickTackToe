@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 
-const DRAW_LINE_ANIMATION_LENGTH = 2000;
+const DRAW_LINE_ANIMATION_LENGTH = 1500;
 
 @Component({
   selector: 'app-board',

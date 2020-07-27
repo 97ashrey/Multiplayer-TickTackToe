@@ -19,30 +19,30 @@ export class GameComponent implements OnInit {
   public playerName = '';
 
   public currentClientPlayer: PlayerModel
-   = {
-    id: '1',
-    name: 'Player1'
-  };
+  //  = {
+  //   id: '1',
+  //   name: 'Player1'
+  // };
 
   private gameConnection: GameConnection;
 
   public gameState: GameState
-   = {
-    id: '123',
-    players: [
-      {id: '1', name: 'Player1', move: 'X'},
-      {id: '2', name: 'Player2', move: 'O'}
-    ],
-    currentPlayer: {id: '1', name: 'Player1', move: 'X'},
-    board: ["O","O","O","O","O","O","O","O","O"],
-    round: 1,
-    roundOver: true,
-    score: {
-      Player1: 1,
-      Player2: 2
-    },
-    lineThrough: 'diag'
-  };
+  //  = {
+  //   id: '123',
+  //   players: [
+  //     {id: '1', name: 'Player1', move: 'X'},
+  //     {id: '2', name: 'Player2', move: 'O'}
+  //   ],
+  //   currentPlayer: {id: '1', name: 'Player1', move: 'X'},
+  //   board: ["X","X","X","X","X","X","","O","O"],
+  //   round: 1,
+  //   roundOver: true,
+  //   score: {
+  //     Player1: 1,
+  //     Player2: 2
+  //   },
+  //   lineThrough: 'row-1'
+  // };
 
   constructor(
     private playerStorageService: PlayerStorageService,
@@ -82,8 +82,8 @@ export class GameComponent implements OnInit {
 
   public lineDrawnHandler() {
     if (this.gameState.roundOver) {
-      // const vote = confirm("Play next round");
-      // this.gameConnection.voteForRound(vote);
+      const vote = confirm("Play next round");
+      this.gameConnection.voteForRound(vote);
     }
   }
 
