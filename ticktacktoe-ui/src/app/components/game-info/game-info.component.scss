@@ -1,3 +1,5 @@
+@import '../../../styles/colors.scss';
+
 $number-color: white;
 
 :host {
@@ -5,7 +7,7 @@ $number-color: white;
     height: 100%;
     display: flex;
 
-    color: #3A3C64;
+    color: $secondary-color;
     font-weight: bold;
 
     padding: 10px;
@@ -50,22 +52,26 @@ $number-color: white;
     justify-content: space-around;
 }
 
-$checkBoxSize: 40px;
-$checkBoxUnCheckedColor: #D07BA5;
-$checkBoxCheckedColor: #F69872;
+$check-box-size: 40px;
 
 .checkBox {
     display: inline-block;
     position: relative;
-    width: $checkBoxSize;
-    height: $checkBoxSize;
+    width: $check-box-size;
+    height: $check-box-size;
     border-radius: 50%;
     background-color: transparent;
-    border: 3px solid #D07BA5;
+    border: 3px solid transparent;
+
+    &.playerx {
+        border-color: $x-color;
+    }
+
+    &.playero {
+        border-color: $o-color;
+    }
 
     &.checked {
-        border-color: #F69872;
-
         &::after {
             position: absolute;
             content: "";
@@ -73,11 +79,23 @@ $checkBoxCheckedColor: #F69872;
             left: 50%;
             transform: translate(-50%, -50%);
     
-            width: $checkBoxSize / 2;
-            height: $checkBoxSize / 2;
+            width: $check-box-size / 2;
+            height: $check-box-size / 2;
     
             border-radius: 50%;
-            background-color: #F69872;
+            background-color: transparent;
+        }
+    }
+
+    &.checked.playerx {
+        &::after{
+            background-color: $x-color;
+        }
+    }
+
+    &.checked.playero {
+        &::after{
+            background-color: $o-color;
         }
     }
 }

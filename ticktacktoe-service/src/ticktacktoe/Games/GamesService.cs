@@ -149,14 +149,16 @@ namespace ticktacktoe.Games
             if (game.RoundOver)
             {
                 game.Score.Increment(game.CurrentPlayer.Name, 1);
+            } 
+            else
+            {
+                game.CurrentPlayer = game.Players.Find(p => p.Id != game.CurrentPlayer.Id);
             }
-            
-            game.CurrentPlayer = game.Players.Find(p => p.Id != game.CurrentPlayer.Id);
 
             this.gamesRepository.Update(game);
 
             MoveProcessingResult moveProcessingResult = this.mapper.Map<MoveProcessingResult>(game);
-            moveProcessingResult.LineTrough = lineTrough;
+            moveProcessingResult.LineThrough = lineTrough;
 
             return moveProcessingResult;
         }
@@ -201,6 +203,8 @@ namespace ticktacktoe.Games
             string p1Move = game.Players[0].Move;
             game.Players[0].Move = game.Players[1].Move;
             game.Players[1].Move = p1Move;
+
+            game.CurrentPlayer = game.Players.Find(p => p.Move == X_MOVE);
 
             game.Board = new string[] {
                     "", "", "",
@@ -277,7 +281,7 @@ namespace ticktacktoe.Games
                 }
                 if (i == width - 1)
                 {
-                    where = $"row{row + 1}";
+                    where = $"row-{row + 1}";
                     return true;
                 }
             }
@@ -291,7 +295,7 @@ namespace ticktacktoe.Games
                 }
                 if (i == width - 1)
                 {
-                    where = $"col{col + 1}";
+                    where = $"col-{col + 1}";
                     return true;
                 }
             }
@@ -307,7 +311,7 @@ namespace ticktacktoe.Games
                     }
                     if (i == width - 1)
                     {
-                        where = "primeDiag";
+                        where = "diag";
                         return true;
                     }
                 }
@@ -324,7 +328,7 @@ namespace ticktacktoe.Games
                     }
                     if (i == width - 1)
                     {
-                        where = "invDiag";
+                        where = "inv-diag";
                         return true;
                     }
                 }

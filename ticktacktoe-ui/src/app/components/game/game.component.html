@@ -15,10 +15,17 @@
         </div>
         <div class="game">
             <div class="board">
-                <button *ngFor="let field of gameState.board; let i = index" (click)="fieldClickHandler(i)">{{field}}</button>
+                <app-board 
+                    [board]="gameState.board" 
+                    [currentPlayerMove]="gameState.currentPlayer.move" 
+                    [currentPlayerId]="gameState.currentPlayer.id"
+                    [thisClientPlayerId]="currentClientPlayer.id"
+                    [linePosition]="gameState.lineThrough"
+                    (fieldClicked)="fieldClickHandler($event)"
+                    (lineDrawn)="lineDrawnHandler()"
+                    ></app-board>
             </div>
             <div class="chat">
-        
             </div>
         </div>
     </div>

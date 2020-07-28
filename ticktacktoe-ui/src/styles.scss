@@ -1,6 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-$green: #5cb85c;
-$dark-green: #4c974c;
+@import './styles/colors.scss';
 
 html {
     box-sizing: border-box;
@@ -13,7 +12,7 @@ html {
 body {
   // background-color: rgb(161, 161, 161);
   // background-image: url('./assets/pattern.jpg');
-  background-color: #20214d;
+  background-color: $primary-color;
   margin: 0;
   padding: 0;
 }

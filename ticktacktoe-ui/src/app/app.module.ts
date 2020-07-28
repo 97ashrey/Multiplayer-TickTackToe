@@ -9,6 +9,7 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { GamePageComponent } from './pages/game-page/game-page.component';
 import { GameComponent } from './components/game/game.component';
 import { GameInfoComponent } from './components/game-info/game-info.component';
+import { BoardComponent } from './components/board/board.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { GameInfoComponent } from './components/game-info/game-info.component';
     GamePageComponent,
     GameComponent,
     GameInfoComponent,
+    BoardComponent,
   ],
   imports: [
     BrowserModule,

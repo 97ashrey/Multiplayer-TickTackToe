@@ -5,5 +5,5 @@ export interface MoveResultGameState {
     board: string[],
     roundOver: boolean;
     score: any;
-    lineTrough: string
+    lineThrough: string
 }

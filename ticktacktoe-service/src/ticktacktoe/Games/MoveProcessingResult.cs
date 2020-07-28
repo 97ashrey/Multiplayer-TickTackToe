@@ -16,6 +16,6 @@ namespace ticktacktoe.Games
 
         public bool RoundOver { get; set; }
 
-        public string LineTrough { get; set; }
+        public string LineThrough { get; set; }
     }
 }

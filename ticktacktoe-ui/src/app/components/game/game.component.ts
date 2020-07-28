@@ -18,29 +18,31 @@ export class GameComponent implements OnInit {
 
   public playerName = '';
 
-  public currentClientPlayer: PlayerModel = {
-    id: '1',
-    name: 'Player1'
-  };
+  public currentClientPlayer: PlayerModel
+  //  = {
+  //   id: '1',
+  //   name: 'Player1'
+  // };
 
   private gameConnection: GameConnection;
 
   public gameState: GameState
-   = {
-    id: '123',
-    players: [
-      {id: '1', name: 'Player1', move: 'X'},
-      {id: '2', name: 'Player2', move: 'O'}
-    ],
-    currentPlayer: {id: '1', name: 'Player1', move: 'X'},
-    board: ["X","X","X","X","X","X","X","X","X"],
-    round: 1,
-    roundOver: false,
-    score: {
-      Player1: 1,
-      Player2: 2
-    }
-  };
+  //  = {
+  //   id: '123',
+  //   players: [
+  //     {id: '1', name: 'Player1', move: 'X'},
+  //     {id: '2', name: 'Player2', move: 'O'}
+  //   ],
+  //   currentPlayer: {id: '1', name: 'Player1', move: 'X'},
+  //   board: ["X","X","X","X","X","X","","O","O"],
+  //   round: 1,
+  //   roundOver: true,
+  //   score: {
+  //     Player1: 1,
+  //     Player2: 2
+  //   },
+  //   lineThrough: 'row-1'
+  // };
 
   constructor(
     private playerStorageService: PlayerStorageService,
@@ -62,7 +64,27 @@ export class GameComponent implements OnInit {
   }
 
   public fieldClickHandler(fieldPosition: number): void {
+    console.log(fieldPosition);
+    if (this.currentClientPlayer.id !== this.gameState.currentPlayer.id) {
+      return;
+    }
+
+    const board = this.gameState.board;
+
+    if (board[fieldPosition] !== "") {
+      return;
+    }
+
+    board[fieldPosition] = this.gameState.currentPlayer.move;
+
     this.gameConnection.doMove(fieldPosition);
+  }
+
+  public lineDrawnHandler() {
+    if (this.gameState.roundOver) {
+      const vote = confirm("Play next round");
+      this.gameConnection.voteForRound(vote);
+    }
   }
 
   private createPlayer(): PlayerModel {
@@ -98,15 +120,12 @@ export class GameComponent implements OnInit {
       console.log(moveResult);
 
       this.gameState = {...this.gameState, ...moveResult};
-      if (moveResult.roundOver) {
-        const vote = confirm("Play next round");
-        this.gameConnection.voteForRound(vote);
-      }
     })
 
     this.gameConnection.onNextRound(nextRound => {
       console.log(nextRound);
       this.gameState = {...this.gameState, ...nextRound};
+      this.gameState.lineThrough = null;
     })
 
     this.gameConnection.onClose(() => {

@@ -1,0 +1,11 @@
+<button
+*ngFor="let field of board; let fieldPosition = index"    
+class="field"
+attr.line={{linePosition}}
+attr.move="{{thisClientPlayerId === currentPlayerId? currentPlayerMove: ''}}"
+attr.value="{{field}}"
+attr.line-position="{{linePosition? linePosition: ''}}"
+attr.thisClientTurn="{{thisClientPlayerId === currentPlayerId}}"
+
+(click)="fieldClickHandler(fieldPosition)"
+>{{field}}</button>
