@@ -5,6 +5,7 @@ import { v1 as uuid } from 'uuid';
 import { GamesService } from 'src/app/services/games.service';
 import { GameState } from 'src/app/services/game-connection/game-state';
 import { GameConnection } from 'src/app/services/game-connection/game-connection';
+import { DialogService } from 'src/app/services/dialog.service';
 
 
 @Component({
@@ -46,7 +47,8 @@ export class GameComponent implements OnInit {
 
   constructor(
     private playerStorageService: PlayerStorageService,
-    private gamesService: GamesService) { }
+    private gamesService: GamesService,
+    private dialogService: DialogService) { }
 
   ngOnInit(): void {
     this.processPlayerInfoFromStorage();
@@ -82,8 +84,12 @@ export class GameComponent implements OnInit {
 
   public lineDrawnHandler() {
     if (this.gameState.roundOver) {
-      const vote = confirm("Play next round");
-      this.gameConnection.voteForRound(vote);
+      this.dialogService.showDialog(
+        "Play next round",
+        answer => {
+          this.gameConnection.voteForRound(answer);
+        }
+      )
     }
   }
 

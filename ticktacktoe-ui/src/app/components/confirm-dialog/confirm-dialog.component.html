@@ -1,0 +1,11 @@
+<div class="overlay" *ngIf="!hidden">
+    <div class="dialog">
+        <div class="messageContainer">
+            <span class="message">{{message}}</span>
+        </div>
+        <div class="buttons">
+            <button class="success yesButton" (click)="clickHandler(true)">Yes</button>
+            <button class="danger noButton" (click)="clickHandler(false)">No</button>
+        </div>
+    </div>
+</div>
