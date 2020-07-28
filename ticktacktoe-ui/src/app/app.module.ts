@@ -10,6 +10,7 @@ import { GamePageComponent } from './pages/game-page/game-page.component';
 import { GameComponent } from './components/game/game.component';
 import { GameInfoComponent } from './components/game-info/game-info.component';
 import { BoardComponent } from './components/board/board.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { BoardComponent } from './components/board/board.component';
     GameComponent,
     GameInfoComponent,
     BoardComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
