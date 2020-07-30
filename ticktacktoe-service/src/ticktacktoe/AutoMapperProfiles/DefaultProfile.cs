@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ticktacktoe.Entities;
 using ticktacktoe.Games;
+using ticktacktoe.Games.Payloads;
 
 namespace ticktacktoe.AutoMapperProfiles
 {

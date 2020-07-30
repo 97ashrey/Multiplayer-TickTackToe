@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ticktacktoe.Helpers;
+using ticktacktoe.Types;
 
-namespace ticktacktoe.Games
+namespace ticktacktoe.Games.Payloads
 {
     public class MoveProcessingResult
     {
@@ -14,8 +15,6 @@ namespace ticktacktoe.Games
 
         public Score Score { get; set; }
 
-        public bool RoundOver { get; set; }
-
-        public string LineThrough { get; set; }
+        public RoundResult RoundResult { get; set; }
     }
 }

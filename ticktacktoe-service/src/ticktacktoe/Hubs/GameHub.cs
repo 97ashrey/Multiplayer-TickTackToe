@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ticktacktoe.DataTransferObjects;
 using ticktacktoe.Games;
+using ticktacktoe.Games.Payloads;
 using ticktacktoe.Requests;
 
 namespace ticktacktoe.Hubs

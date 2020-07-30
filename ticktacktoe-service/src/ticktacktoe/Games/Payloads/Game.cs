@@ -2,27 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ticktacktoe.Types;
+using ticktacktoe.Entities;
 using ticktacktoe.Helpers;
+using ticktacktoe.Types;
 
-namespace ticktacktoe.Entities
+namespace ticktacktoe.Games.Payloads
 {
-    public class GameEntity : IEntity
+    public class Game
     {
         public string Id { get; set; }
 
-        public List<PlayerEntity> Players { get; set; }
+        public List<Player> Players { get; set; }
 
-        public PlayerEntity CurrentPlayer { get; set; }
+        public Player CurrentPlayer { get; set; }
 
         public string[] Board { get; set; }
 
         public RoundResult RoundResult { get; set; }
 
-        public int Round { get; set; }
-
         public Score Score { get; set; }
-
-        public Dictionary<string, bool> NextRoundVotes { get; set; }
     }
 }
