@@ -25,7 +25,7 @@ namespace ticktacktoe.Games
             {"row-2", RoundResult.MiddleRow },
             {"row-3", RoundResult.BottomRow },
             {"col-1", RoundResult.LeftColumn },
-            {"col-2", RoundResult.MiddleRow },
+            {"col-2", RoundResult.MiddleColumn },
             {"col-3", RoundResult.RightColumn },
             {"diag", RoundResult.Diagonal },
             {"inv-diag", RoundResult.InversDiagonal },
@@ -165,7 +165,7 @@ namespace ticktacktoe.Games
 
             if (winCondition)
             {
-                game.Score.Increment(game.CurrentPlayer.Name, 1);
+                game.Score.Increment(game.CurrentPlayer.Id, 1);
             } 
             else
             {

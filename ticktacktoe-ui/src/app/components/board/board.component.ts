@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { LinePosition } from '../../types/line-position';
 
 const DRAW_LINE_ANIMATION_LENGTH = 1500;
+const EVENT_EMITT_DELAY = 500;
 
 @Component({
   selector: 'app-board',
@@ -11,7 +13,7 @@ export class BoardComponent implements OnInit, OnChanges {
 
   @Input() board: string[] = ["","","","","","","","",""]
   @Input() currentPlayerMove: string;
-  @Input() linePosition: string;
+  @Input() linePosition: LinePosition;
   @Input() currentPlayerId: string;
   @Input() thisClientPlayerId: string;
 
@@ -25,10 +27,11 @@ export class BoardComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {
     if (this.linePosition) {
+      console.log(this.linePosition)
       const timeout = setTimeout(() => {
         clearTimeout(timeout);
         this.lineDrawn.emit();
-      }, DRAW_LINE_ANIMATION_LENGTH);
+      }, DRAW_LINE_ANIMATION_LENGTH + EVENT_EMITT_DELAY);
     }
   }
 

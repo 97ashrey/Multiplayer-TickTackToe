@@ -1,9 +1,10 @@
 import { Player } from './player';
+import { RoundResult } from 'src/app/types/round-result';
 
 export interface MoveResultGameState {
     currentPlayer: Player;
     board: string[],
-    roundOver: boolean;
+    roundResult: RoundResult;
     score: any;
     lineThrough: string
 }

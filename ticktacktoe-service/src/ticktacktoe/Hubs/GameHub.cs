@@ -52,6 +52,7 @@ namespace ticktacktoe.Hubs
             }
             else if (result.VoteStatus == VoteStatus.GameOver)
             {
+                await Clients.Group(gameId).SendAsync("GameOver");
                 this.gamesService.Delete(gameId);
             }
         }

@@ -20,7 +20,7 @@
                     [currentPlayerMove]="gameState.currentPlayer.move" 
                     [currentPlayerId]="gameState.currentPlayer.id"
                     [thisClientPlayerId]="currentClientPlayer.id"
-                    [linePosition]="gameState.lineThrough"
+                    [linePosition]="linePositionMap.get(gameState.roundResult)"
                     (fieldClicked)="fieldClickHandler($event)"
                     (lineDrawn)="lineDrawnHandler()"
                     ></app-board>
