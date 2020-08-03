@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using ticktacktoe.Entities;
 using ticktacktoe.Helpers;
+using ticktacktoe.Types;
 
-namespace ticktacktoe.Games
+namespace ticktacktoe.Games.Payloads
 {
     public class Game
     {
@@ -17,14 +18,8 @@ namespace ticktacktoe.Games
 
         public string[] Board { get; set; }
 
-        public bool RoundOver { get; set; }
-
-        public int Round { get; set; }
+        public RoundResult RoundResult { get; set; }
 
         public Score Score { get; set; }
-
-        //public Player PlayerOne { get => Players[0]; }
-
-        //public Player PlayerTwo { get => Players[1]; }
     }
 }

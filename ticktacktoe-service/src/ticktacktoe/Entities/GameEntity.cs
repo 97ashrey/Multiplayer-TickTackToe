@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ticktacktoe.Types;
 using ticktacktoe.Helpers;
 
 namespace ticktacktoe.Entities
@@ -16,7 +17,7 @@ namespace ticktacktoe.Entities
 
         public string[] Board { get; set; }
 
-        public bool RoundOver { get; set; }
+        public RoundResult RoundResult { get; set; }
 
         public int Round { get; set; }
 

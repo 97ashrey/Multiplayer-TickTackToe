@@ -22,7 +22,7 @@ connectButton.addEventListener("click", (event) => {
     playerId = playerIdInput.value;
 
     connection = new signalR.HubConnectionBuilder()
-    .withUrl(`https://localhost:44325/game?gameId=${gameId}&playerName=${playerName}&playerID=${playerId}`)
+    .withUrl(`http://localhost:5000/game?gameId=${gameId}&playerName=${playerName}&playerID=${playerId}`)
     // .withAutomaticReconnect()
     .build();
     

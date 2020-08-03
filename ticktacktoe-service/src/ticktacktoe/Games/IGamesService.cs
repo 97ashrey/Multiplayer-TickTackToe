@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ticktacktoe.Entities;
+using ticktacktoe.Games.Payloads;
+
 
 namespace ticktacktoe.Games
 {

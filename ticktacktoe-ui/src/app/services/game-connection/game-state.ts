@@ -1,12 +1,12 @@
 import { Player } from './player';
+import { RoundResult } from '../../types/round-result';
 
 export interface GameState {
     id: string;
     players: Player[];
     currentPlayer: Player;
     board: string[],
-    roundOver: boolean;
+    roundResult: RoundResult;
     round: number;
     score: any;
-    lineThrough?: string;
 }

@@ -9,7 +9,8 @@ export class GameConnection {
     PLAYERS_CONNECTED: 'PlayersConnected',
     PLAYER_DISCONNECTED: 'PlayerDisconnected',
     MOVE_RESULT: 'MoveResult',
-    NEXT_ROUND: 'NextRound'
+    NEXT_ROUND: 'NextRound',
+    GAME_OVER: 'GameOver'
   }
 
   private connection: HubConnection;
@@ -57,6 +58,10 @@ export class GameConnection {
     });
   }
 
+  public onGameOver(callback: () => void): void {
+    this.connection.on(this.GameEvent.GAME_OVER, callback);
+  }
+
   public onClose(callback: () => void) {
     this.connection.onclose(callback);
   }
@@ -68,5 +73,9 @@ export class GameConnection {
     this.connection.start()
       .then(callback? callback : () => console.log('Connected'))
       .catch(this.errorHandler);
+  }
+
+  public close() {
+    this.connection.stop();
   }
 }

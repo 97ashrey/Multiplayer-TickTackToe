@@ -3,7 +3,7 @@
     {   
         name: thisClientPlayer.name, 
         move: thisClientPlayer.move, 
-        score: score[thisClientPlayer.name]
+        score: score[thisClientPlayer.id]
     }"></ng-container>
 <div class="stats">
     <div class="turn">
@@ -20,7 +20,7 @@
     {   
         name: otherClientPlayer.name, 
         move: otherClientPlayer.move, 
-        score: score[otherClientPlayer.name]
+        score: score[otherClientPlayer.id]
     }"></ng-container>
 
 <ng-template #playerInfo let-name="name" let-move="move" let-score="score">

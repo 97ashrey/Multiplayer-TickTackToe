@@ -7,15 +7,30 @@ using ticktacktoe.Entities;
 using ticktacktoe.Games.Exceptions;
 using ticktacktoe.Helpers;
 using ticktacktoe.Repsitories;
+using ticktacktoe.Games.Payloads;
+using ticktacktoe.Types;
 
 namespace ticktacktoe.Games
 {
     public class GamesService : IGamesService
     {
-        private const int MAX_PLAYERS_COUNT = 2;
-        private const int MAX_BOARD_SIZE = 9;
-        private const string X_MOVE = "X";
-        private const string O_MOVE = "O";
+        private static readonly int MAX_PLAYERS_COUNT = 2;
+        private static readonly int MAX_BOARD_SIZE = 9;
+        private static readonly string X_MOVE = "X";
+        private static readonly string O_MOVE = "O";
+
+        private static readonly Dictionary<string, RoundResult> WIN_CONDITION_MAP = new Dictionary<string, RoundResult>()
+        {
+            {"row-1", RoundResult.TopRow },
+            {"row-2", RoundResult.MiddleRow },
+            {"row-3", RoundResult.BottomRow },
+            {"col-1", RoundResult.LeftColumn },
+            {"col-2", RoundResult.MiddleColumn },
+            {"col-3", RoundResult.RightColumn },
+            {"diag", RoundResult.Diagonal },
+            {"inv-diag", RoundResult.InversDiagonal },
+            {"draw", RoundResult.Draw }
+        };
 
         private readonly IGamesRepository gamesRepository;
         private readonly IMapper mapper;
@@ -50,7 +65,7 @@ namespace ticktacktoe.Games
                     };
 
                     game.Players.Add(newPlayer);
-                    game.Score.RegisterKey(playerName);
+                    game.Score.RegisterKey(playerId);
 
                     if (game.CurrentPlayer == null)
                     {
@@ -114,7 +129,7 @@ namespace ticktacktoe.Games
                 CurrentPlayer = null,
                 Score = new Score(),
                 Round = 1,
-                RoundOver = false,
+                RoundResult = RoundResult.NotOver,
                 Board = new string[] {
                     "", "", "",
                     "", "", "",
@@ -144,11 +159,13 @@ namespace ticktacktoe.Games
         {
             GameEntity game = this.DoMove(gameId, playerId, fieldPosition);
 
-            game.RoundOver = this.CheckIfRoundIsOver(game.Board, fieldPosition, game.CurrentPlayer.Move, out string lineTrough);
+            game.RoundResult = this.GetRoundResult(game.Board, fieldPosition, game.CurrentPlayer.Move);
 
-            if (game.RoundOver)
+            bool winCondition = game.RoundResult != RoundResult.NotOver && game.RoundResult != RoundResult.Draw;
+
+            if (winCondition)
             {
-                game.Score.Increment(game.CurrentPlayer.Name, 1);
+                game.Score.Increment(game.CurrentPlayer.Id, 1);
             } 
             else
             {
@@ -158,7 +175,6 @@ namespace ticktacktoe.Games
             this.gamesRepository.Update(game);
 
             MoveProcessingResult moveProcessingResult = this.mapper.Map<MoveProcessingResult>(game);
-            moveProcessingResult.LineThrough = lineTrough;
 
             return moveProcessingResult;
         }
@@ -167,7 +183,7 @@ namespace ticktacktoe.Games
         {
             GameEntity game = this.GetGameExceptionaly(gameId);
 
-            if (!game.RoundOver)
+            if (game.RoundResult == RoundResult.NotOver)
             {
                 throw new GameException("Round is not over.");
             }
@@ -197,7 +213,7 @@ namespace ticktacktoe.Games
         private void StartNewRound(GameEntity game)
         {
             game.Round += 1;
-            game.RoundOver = false;
+            game.RoundResult = RoundResult.NotOver;
             game.NextRoundVotes.Clear();
 
             string p1Move = game.Players[0].Move;
@@ -247,7 +263,7 @@ namespace ticktacktoe.Games
                 throw new GameException($"Player with id '{playerId}' can't make a move because it's not his turn.");
             }
 
-            if (game.RoundOver)
+            if (game.RoundResult != RoundResult.NotOver)
             {
                 throw new GameException($"Round is over can't do any more moves.");
             }
@@ -264,12 +280,19 @@ namespace ticktacktoe.Games
             return game;
         }
 
-        private bool CheckIfRoundIsOver(string[] board, int fieldPosition, string pInput, out string where)
+        private RoundResult GetRoundResult(string[] board, int fieldPosition, string pInput)
         {
             //turn index into rows and colls
             int width = 3;
             int row = fieldPosition / width;
             int col = Math.Abs(fieldPosition - width * row);
+
+            int numberOfMovesPlayed = board.Count(field => field != "");
+
+            if (numberOfMovesPlayed < 5)
+            {
+                return RoundResult.NotOver;
+            }
 
             // look for winner
             // row checks
@@ -281,8 +304,8 @@ namespace ticktacktoe.Games
                 }
                 if (i == width - 1)
                 {
-                    where = $"row-{row + 1}";
-                    return true;
+                    string key = $"row-{row + 1}";
+                    return WIN_CONDITION_MAP[key];
                 }
             }
 
@@ -295,8 +318,8 @@ namespace ticktacktoe.Games
                 }
                 if (i == width - 1)
                 {
-                    where = $"col-{col + 1}";
-                    return true;
+                    string key = $"col-{col + 1}";
+                    return WIN_CONDITION_MAP[key];
                 }
             }
 
@@ -311,13 +334,13 @@ namespace ticktacktoe.Games
                     }
                     if (i == width - 1)
                     {
-                        where = "diag";
-                        return true;
+                        string key = "diag";
+                        return WIN_CONDITION_MAP[key];
                     }
                 }
             }
 
-            // Side diag check
+            // Inv diag check
             if ((col + row) == width - 1)
             {
                 for (int i = 0; i < width; i++)
@@ -328,14 +351,13 @@ namespace ticktacktoe.Games
                     }
                     if (i == width - 1)
                     {
-                        where = "inv-diag";
-                        return true;
+                        string key = "inv-diag";
+                        return WIN_CONDITION_MAP[key];
                     }
                 }
             }
 
-            where = "";
-            return false;
+            return numberOfMovesPlayed == MAX_BOARD_SIZE ? RoundResult.Draw : RoundResult.NotOver;
         }
 
         private bool IsIndexInRange(int index)
