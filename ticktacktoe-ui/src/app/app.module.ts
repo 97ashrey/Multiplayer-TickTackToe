@@ -11,6 +11,8 @@ import { GameComponent } from './components/game/game.component';
 import { GameInfoComponent } from './components/game-info/game-info.component';
 import { BoardComponent } from './components/board/board.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { AlertComponent } from './components/alert/alert.component';
+import { AlertContainerComponent } from './components/alert-container/alert-container.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     GameInfoComponent,
     BoardComponent,
     ConfirmDialogComponent,
+    AlertComponent,
+    AlertContainerComponent,
   ],
   imports: [
     BrowserModule,

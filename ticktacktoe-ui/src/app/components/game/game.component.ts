@@ -8,6 +8,7 @@ import { GameConnection } from 'src/app/services/game-connection/game-connection
 import { DialogService } from 'src/app/services/dialog.service';
 import { RoundResult } from 'src/app/types/round-result';
 import { LinePosition } from 'src/app/types/line-position';
+import { AlertService } from 'src/app/services/alert.service';
 
 
 const RoundResultToLinePositionMap = new Map<RoundResult, LinePosition>();
@@ -52,18 +53,18 @@ export class GameComponent implements OnInit {
   //   currentPlayer: {id: '1', name: 'Player1', move: 'X'},
   //   board: ["X","X","X","X","X","X","","O","O"],
   //   round: 1,
-  //   roundOver: true,
   //   score: {
   //     Player1: 1,
   //     Player2: 2
   //   },
-  //   lineThrough: 'row-1'
+  //   roundResult: RoundResult.NotOver
   // };
 
   constructor(
     private playerStorageService: PlayerStorageService,
     private gamesService: GamesService,
-    private dialogService: DialogService) {
+    private dialogService: DialogService,
+    private alertService: AlertService) {
       this.dialogAnswerHandler = this.dialogAnswerHandler.bind(this);
     }
 
@@ -123,6 +124,10 @@ export class GameComponent implements OnInit {
     this.gameConnection.onPlayersConnected(gameState => {
       console.log('Players connected');
       console.log(gameState);
+      this.alertService.showAlert({
+        type: 'success',
+        text: 'Players connected'
+      })
       this.gameState = {...gameState};
 
 
@@ -136,6 +141,10 @@ export class GameComponent implements OnInit {
 
     this.gameConnection.onPlayerDisconnected(() => {
       console.log('Player disconnected');
+      this.alertService.showAlert({
+        type: 'warning',
+        text: 'Player disconnected'
+      })
     });
 
     this.gameConnection.onMoveResult(moveResult => {
@@ -158,20 +167,38 @@ export class GameComponent implements OnInit {
 
     this.gameConnection.onGameOver(() => {
       console.log("Game is over");
+      this.alertService.showAlert({
+        type: 'warning',
+        text: 'Game is over'
+      })
       this.gameConnection.close();
       this.gameEnded.emit();
     });
 
     this.gameConnection.onClose(() => {
       console.log('Connection closed');
+      this.alertService.showAlert({
+        type: 'danger',
+        text: 'Lost connection'
+      })
     });
 
     this.gameConnection.start(
       () => {
         console.log('Connection started')
+        this.alertService.showAlert({
+          type: 'success',
+          text: 'Connected'
+        })
         this.currentClientPlayer = player;
       },
-      error => console.log('Error Occured', error)
+      error => {
+        console.log(error);
+        this.alertService.showAlert({
+          type: 'danger',
+          text: 'An error occured'
+        })
+      }
     );
   }
 
