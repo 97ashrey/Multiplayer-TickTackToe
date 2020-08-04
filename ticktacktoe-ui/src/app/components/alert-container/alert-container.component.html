@@ -1,0 +1,3 @@
+<div class="alert" *ngIf="alert">
+    <app-alert [text]="alert.text" [type]="alert.type" (onClose)="onCloseHandler()"></app-alert>
+</div>

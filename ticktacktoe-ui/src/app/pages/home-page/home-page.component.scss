@@ -3,20 +3,11 @@ $dark-green: #4c974c;
 
 :host {
     width: 100%;
-    height: 100vh;
+    height: 100%;
 
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-@media screen and (min-width: 1024px) {
-    :host {
-        width: 50%;
-        height: 100vh;
-       
-        margin: 0 auto;
-    }
 }
 
 .gameBanner {
