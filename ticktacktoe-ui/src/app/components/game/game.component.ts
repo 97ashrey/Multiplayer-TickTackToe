@@ -41,7 +41,7 @@ export class GameComponent implements OnInit {
   //   name: 'Player1'
   // };
 
-  private gameConnection: GameConnection;
+  public gameConnection: GameConnection;
 
   public gameState: GameState
   //  = {

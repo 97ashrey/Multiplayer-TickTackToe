@@ -13,6 +13,7 @@ import { BoardComponent } from './components/board/board.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { AlertContainerComponent } from './components/alert-container/alert-container.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { AlertContainerComponent } from './components/alert-container/alert-cont
     ConfirmDialogComponent,
     AlertComponent,
     AlertContainerComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,

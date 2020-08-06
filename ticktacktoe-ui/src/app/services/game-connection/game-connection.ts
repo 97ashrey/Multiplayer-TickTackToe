@@ -2,6 +2,7 @@ import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { GameState } from './game-state';
 import { MoveResultGameState } from './move-result-game-state';
 import { NextRoundGameState } from './next-round-game-state';
+import { ChatMessageModel } from '../../models/chat-message.mode';
 
 export class GameConnection {
 
@@ -10,7 +11,8 @@ export class GameConnection {
     PLAYER_DISCONNECTED: 'PlayerDisconnected',
     MOVE_RESULT: 'MoveResult',
     NEXT_ROUND: 'NextRound',
-    GAME_OVER: 'GameOver'
+    GAME_OVER: 'GameOver',
+    MESSAGE: 'Message'
   }
 
   private connection: HubConnection;
@@ -36,6 +38,11 @@ export class GameConnection {
       .catch(this.errorHandler);
   }
 
+  public sendMessage(message: string): void {
+    this.connection.invoke('Send', message)
+      .catch(this.errorHandler);
+  }
+
   public onPlayersConnected(callback: (gameState: GameState) => void): void {
     this.connection.on(this.GameEvent.PLAYERS_CONNECTED, data => {
       callback(data as GameState);
@@ -56,6 +63,12 @@ export class GameConnection {
     this.connection.on(this.GameEvent.NEXT_ROUND, data => {
       callback(data as NextRoundGameState);
     });
+  }
+
+  public onMessage(callback: (playerId: string, message: string) => void) {
+    this.connection.on(this.GameEvent.MESSAGE, (playerId, message) => {
+      callback(playerId, message);
+    })
   }
 
   public onGameOver(callback: () => void): void {
