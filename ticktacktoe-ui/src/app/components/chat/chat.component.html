@@ -1,0 +1,15 @@
+<div class="messages" #messages>
+    <ng-container *ngFor="let chatMessage of chatMessages">
+        <ng-container *ngTemplateOutlet="message; context: chatMessage"></ng-container>
+    </ng-container>
+ </div>
+ <div class="inputContainer">
+     <input type="text" [(ngModel)]="messageValue" (keydown.enter)="enterHandler()"/>
+ </div>
+
+
+<ng-template #message let-playerName="playerName" let-playerId="playerId" let-message="message">
+    <div class="message">
+        <span class="user" [attr.thisClient]="currentPlayer.id === playerId">{{playerName}}</span>:&nbsp;<span class="text">{{message}}</span>
+    </div>
+</ng-template>

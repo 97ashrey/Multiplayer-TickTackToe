@@ -26,6 +26,10 @@
                     ></app-board>
             </div>
             <div class="chat">
+                <app-chat 
+                    [gameConncetion]="gameConnection" 
+                    [connectedPlayers]="gameState.players" 
+                    [currentPlayer]="currentClientPlayer"></app-chat>
             </div>
         </div>
     </div>

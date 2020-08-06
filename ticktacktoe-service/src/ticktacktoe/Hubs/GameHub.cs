@@ -26,7 +26,8 @@ namespace ticktacktoe.Hubs
         public async Task Send(string message)
         {
             string gameId = this.GetParameterFromRequest(GAME_ID_PARAMETER_NAME);
-            await Clients.Group(gameId).SendAsync("ReceiveMessage", message);
+            string playerId = this.GetParameterFromRequest(PLAYER_ID_PARAMETER_NAME);
+            await Clients.OthersInGroup(gameId).SendAsync("Message", playerId, message);
         }
 
         public async Task DoMove(int fieldPosition)
