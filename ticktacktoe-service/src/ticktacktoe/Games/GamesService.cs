@@ -28,7 +28,7 @@ namespace ticktacktoe.Games
             {"col-2", RoundResult.MiddleColumn },
             {"col-3", RoundResult.RightColumn },
             {"diag", RoundResult.Diagonal },
-            {"inv-diag", RoundResult.InversDiagonal },
+            {"inv-diag", RoundResult.InverseDiagonal },
             {"draw", RoundResult.Draw }
         };
 

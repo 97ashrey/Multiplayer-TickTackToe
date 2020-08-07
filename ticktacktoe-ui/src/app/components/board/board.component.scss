@@ -210,7 +210,7 @@ $dark-o-color: darken($color: $o-color, $amount: 10);
         }
 
         &[line$="-3"] {
-            &:nth-child(3), &:nth-child(6), &:nth-child(7) {
+            &:nth-child(3), &:nth-child(6), &:nth-child(9) {
                 &[value="X"] {
                     background-color: $dark-x-color;
                 }

@@ -36,27 +36,3 @@ $dark-green: #4c974c;
 
     margin-bottom: 10px;
 }
-
-.gameLink {
-    display: flex;
-    align-items: center;
-
-    width: 60%;
-    height: 40px;
-    
-    background-color: white;
-
-    .link {
-        flex: 0.9;
-        height: 100%;
-    }
-
-    .copyButton {
-        display: block;
-
-        flex: 0.1;
-        height: 100%;
-
-        border-radius: 0px;
-    }
-}

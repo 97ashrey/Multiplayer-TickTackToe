@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-game-page',
@@ -9,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class GamePageComponent implements OnInit {
 
   public gameId: string;
+  public gameUrl: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -16,6 +18,7 @@ export class GamePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.gameId = this.route.snapshot.paramMap.get('gameId');
+    this.gameUrl = location.href;
   }
 
   public gameEndedHandler(): void {
