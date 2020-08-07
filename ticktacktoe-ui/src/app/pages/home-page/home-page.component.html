@@ -3,9 +3,3 @@
 </div>
 
 <button class="success newGameButton" (click)="newGameClickHandler()">New Game</button>
-
-<div class="gameLink">
-    <!-- <span class="link" contenteditable="true" readonly="true">{{ gameLink | async }}</span> -->
-    <input #link type="text" class="link green" readonly="true" value="{{ gameLink | async }}">
-    <button class="success copyButton" (click)="copyClickHandler()">copy</button>
-</div>

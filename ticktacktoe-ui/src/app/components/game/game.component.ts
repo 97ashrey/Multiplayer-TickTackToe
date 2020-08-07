@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PlayerStorageService } from 'src/app/services/player-storage.service';
 import { PlayerModel } from 'src/app/models/player.model';
 import { v1 as uuid } from 'uuid';
@@ -28,37 +28,21 @@ RoundResultToLinePositionMap.set(RoundResult.InverseDiagonal, 'inv-diag');
 })
 export class GameComponent implements OnInit {
 
+  @ViewChild('link') linkInput;
+
   @Input() public gameId: string;
+  @Input() public gameUrl: string;
   @Output() gameEnded = new EventEmitter();
 
   public playerName = '';
   
   public linePositionMap = RoundResultToLinePositionMap;
 
-  public currentClientPlayer: PlayerModel
-  //  = {
-  //   id: '1',
-  //   name: 'Player1'
-  // };
+  public currentClientPlayer: PlayerModel;
 
   public gameConnection: GameConnection;
 
-  public gameState: GameState
-  //  = {
-  //   id: '123',
-  //   players: [
-  //     {id: '1', name: 'Player1', move: 'X'},
-  //     {id: '2', name: 'Player2', move: 'O'}
-  //   ],
-  //   currentPlayer: {id: '1', name: 'Player1', move: 'X'},
-  //   board: ["X","X","X","X","X","X","","O","O"],
-  //   round: 1,
-  //   score: {
-  //     Player1: 1,
-  //     Player2: 2
-  //   },
-  //   roundResult: RoundResult.NotOver
-  // };
+  public gameState: GameState;
 
   constructor(
     private playerStorageService: PlayerStorageService,
@@ -105,6 +89,12 @@ export class GameComponent implements OnInit {
       this.getDialogMessage(this.gameState.roundResult),
       this.dialogAnswerHandler
     );
+  }
+
+  copyClickHandler() {
+    this.linkInput.nativeElement.select();
+    
+    document.execCommand('copy');
   }
 
   private createPlayer(): PlayerModel {

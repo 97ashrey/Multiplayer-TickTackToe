@@ -1,31 +1,34 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { GamesService } from '../../services/games.service';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss']
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnInit, OnDestroy {
 
   @ViewChild('link') linkInput;
 
-  public gameLink: Observable<string>
+  private subscriptions = new Subscription;
 
-  constructor(private gamesService: GamesService) { }
+  constructor(
+    private gamesService: GamesService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
 
-  newGameClickHandler() {
-    this.gameLink = this.gamesService.newGame();
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
-  copyClickHandler() {
-    this.linkInput.nativeElement.select();
-    
-    document.execCommand('copy');
+  newGameClickHandler() {
+    this.subscriptions.add(this.gamesService.newGame().subscribe(gameId => {
+      this.router.navigate(['games', gameId])
+    }));
   }
 
 }

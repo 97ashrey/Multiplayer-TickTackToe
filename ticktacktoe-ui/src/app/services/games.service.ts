@@ -25,10 +25,7 @@ export class GamesService {
   public newGame(): Observable<string> {
     return this.httpClient.get<{gameId: string}>(`${this.hostUrl}${gamesServiceRoutes.newGame}`)
     .pipe(map(respone => {
-      const protocol = location.protocol;
-      const hostName = location.hostname;
-      const portName = location.port;
-      return `${protocol}//${hostName}:${portName}/games/${respone.gameId}`;
+      return respone.gameId;
     }));
   }
 
