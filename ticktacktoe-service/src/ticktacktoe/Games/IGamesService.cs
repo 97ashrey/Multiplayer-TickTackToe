@@ -18,7 +18,7 @@ namespace ticktacktoe.Games
 
         PlayerConnectionResult ConnectPlayer(string gameId, string playerId, string playerName);
 
-        void DisconectPlayer(string gameId, string playerId);
+        PlayerDisconectedResult DisconectPlayer(string gameId, string playerId);
 
         MoveProcessingResult ProcessMove(string gameId, string playerId, int fieldPosition);
 

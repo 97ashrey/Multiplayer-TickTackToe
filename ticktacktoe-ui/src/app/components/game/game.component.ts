@@ -130,12 +130,18 @@ export class GameComponent implements OnInit, OnDestroy {
       this.gameConnection.onPlayersConnected().subscribe(gameState => {
         console.log('Players connected');
         console.log(gameState);
+ 
+
         this.alertService.showAlert({
           type: 'success',
           text: 'Players connected'
         })
-        this.gameState = {...gameState};
 
+        if (this.gameState) {
+          return;
+        }
+
+        this.gameState = {...gameState};
 
         if (this.gameState.roundResult !== RoundResult.NotOver) {
           this.dialogService.showDialog(
@@ -188,7 +194,7 @@ export class GameComponent implements OnInit, OnDestroy {
               text: 'Game is over'
             });
             this.gameEnded.emit();
-          });
+          })
       })
     );
 
@@ -238,7 +244,7 @@ export class GameComponent implements OnInit, OnDestroy {
   private dialogAnswerHandler(answer: boolean): void {
     this.gameConnection.voteForRound(answer).then(() => {
       if (!answer) {
-        this.gameEnded.emit();
+        this.gameConnection.stop().then(() => this.gameEnded.emit());
       }
     });
   }
