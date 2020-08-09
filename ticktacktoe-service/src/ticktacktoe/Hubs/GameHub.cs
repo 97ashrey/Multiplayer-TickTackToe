@@ -27,7 +27,15 @@ namespace ticktacktoe.Hubs
         {
             string gameId = this.GetParameterFromRequest(GAME_ID_PARAMETER_NAME);
             string playerId = this.GetParameterFromRequest(PLAYER_ID_PARAMETER_NAME);
-            await Clients.OthersInGroup(gameId).SendAsync("Message", playerId, message);
+            string playerName = this.GetParameterFromRequest(PLAYER_NAME_PARAMETER_NAME);
+
+            ChatMessage chatMessage = new ChatMessage()
+            { 
+                PlayerId = playerId, 
+                PlayerName = playerName, 
+                Message = message 
+            };
+            await Clients.OthersInGroup(gameId).SendAsync("Message", chatMessage);
         }
 
         public async Task DoMove(int fieldPosition)
