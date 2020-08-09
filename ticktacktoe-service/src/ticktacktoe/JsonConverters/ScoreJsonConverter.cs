@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using ticktacktoe.Helpers;
+using ticktacktoe.Types;
 
 namespace ticktacktoe.JsonConverters
 {

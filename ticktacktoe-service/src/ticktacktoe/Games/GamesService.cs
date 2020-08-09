@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using ticktacktoe.Entities;
 using ticktacktoe.Games.Exceptions;
-using ticktacktoe.Helpers;
 using ticktacktoe.Repsitories;
 using ticktacktoe.Games.Payloads;
 using ticktacktoe.Types;
@@ -102,7 +101,7 @@ namespace ticktacktoe.Games
             };
         }
 
-        public void DisconectPlayer(string gameId, string playerId)
+        public PlayerDisconectedResult DisconectPlayer(string gameId, string playerId)
         {
             GameEntity game = this.GetGameExceptionaly(gameId);
 
@@ -116,6 +115,12 @@ namespace ticktacktoe.Games
             playerToDisconect.Connected = false;
 
             this.gamesRepository.Update(game);
+
+            return new PlayerDisconectedResult()
+            {
+                VoteStatus = game.NextRoundVotes.VoteStatus,
+                RoundResult = game.RoundResult
+            };
         }
 
         public string Create()
@@ -135,7 +140,7 @@ namespace ticktacktoe.Games
                     "", "", "",
                     "", "", "",
                 },
-                NextRoundVotes = new Dictionary<string, bool>()
+                NextRoundVotes = new NextRoundVotes(MAX_PLAYERS_COUNT)
             };
 
             this.gamesRepository.Create(newGame);
@@ -188,12 +193,12 @@ namespace ticktacktoe.Games
                 throw new GameException("Round is not over.");
             }
 
-            if (!game.NextRoundVotes.TryAdd(playerId, vote))
+            if (!game.NextRoundVotes.Vote(playerId, vote))
             {
                 throw new GameException($"Player with {playerId} already voted.");
             }
 
-            VoteStatus status = this.GetVoteStatus(game.NextRoundVotes);
+            VoteStatus status = game.NextRoundVotes.VoteStatus;
 
             if (status == VoteStatus.NextRound)
             {

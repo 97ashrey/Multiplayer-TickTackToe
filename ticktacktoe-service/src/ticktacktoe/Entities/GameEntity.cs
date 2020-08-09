@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ticktacktoe.Types;
-using ticktacktoe.Helpers;
 
 namespace ticktacktoe.Entities
 {
@@ -23,6 +22,6 @@ namespace ticktacktoe.Entities
 
         public Score Score { get; set; }
 
-        public Dictionary<string, bool> NextRoundVotes { get; set; }
+        public NextRoundVotes NextRoundVotes;
     }
 }

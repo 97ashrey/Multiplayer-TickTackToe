@@ -6,14 +6,9 @@ using ticktacktoe.Types;
 
 namespace ticktacktoe.Games.Payloads
 {
-    public class MoveProcessingResult
+    public class PlayerDisconectedResult
     {
-        public string[] Board { get; set; }
-
-        public Player CurrentPlayer { get; set; }
-
-        public Score Score { get; set; }
-
+        public VoteStatus VoteStatus { get; set; }
         public RoundResult RoundResult { get; set; }
     }
 }

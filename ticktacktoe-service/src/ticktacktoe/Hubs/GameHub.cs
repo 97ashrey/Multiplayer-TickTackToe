@@ -7,6 +7,7 @@ using ticktacktoe.DataTransferObjects;
 using ticktacktoe.Games;
 using ticktacktoe.Games.Payloads;
 using ticktacktoe.Requests;
+using ticktacktoe.Types;
 
 namespace ticktacktoe.Hubs
 {
@@ -58,11 +59,11 @@ namespace ticktacktoe.Hubs
             if (result.VoteStatus == VoteStatus.NextRound)
             {
                 await Clients.Group(gameId).SendAsync("NextRound", result.GameState);
-            }
+            } 
             else if (result.VoteStatus == VoteStatus.GameOver)
             {
                 await Clients.Group(gameId).SendAsync("GameOver");
-                this.gamesService.Delete(gameId);
+
             }
         }
 
@@ -85,10 +86,16 @@ namespace ticktacktoe.Hubs
         {
             DisconnectFromGameRequest request = this.GetDisconnectFromGameRequest();
 
-            this.gamesService.DisconectPlayer(request.GameId, request.PlayerId);
+            PlayerDisconectedResult result = this.gamesService.DisconectPlayer(request.GameId, request.PlayerId);
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, request.GameId);
             await Clients.Group(request.GameId).SendAsync("PlayerDisconnected");
+
+            if (result.RoundResult != RoundResult.NotOver && result.VoteStatus == VoteStatus.GameOver)
+            {
+                this.gamesService.Delete(request.GameId);
+            }
+
             await base.OnDisconnectedAsync(exception);
         }
 
