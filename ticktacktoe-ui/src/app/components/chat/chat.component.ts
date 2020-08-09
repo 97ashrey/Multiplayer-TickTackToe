@@ -1,32 +1,39 @@
-import { Component, OnInit, Input, ViewChild, OnChanges, AfterContentChecked, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { GameConnection } from 'src/app/services/game-connection/game-connection';
 import { PlayerModel } from 'src/app/models/player.model';
-import { ChatMessageModel } from 'src/app/models/chat-message.mode';
+import { ChatMessage } from 'src/app/services/game-connection/chat-message';
 import { Player } from 'src/app/services/game-connection/player';
+import { Subscription } from 'rxjs';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
 
   @ViewChild('messages') messagesContainer;
 
   @Input() gameConncetion: GameConnection;
-  @Input() connectedPlayers: Player[];
   @Input() currentPlayer: PlayerModel;
 
-  public chatMessages: ChatMessageModel[] = [];
+  public chatMessages: ChatMessage[] = [];
 
   public messageValue = "";
 
-  constructor() { }
+  private subscriptions = new Subscription;
+
+  constructor(private alertSerivce: AlertService) { }
 
   ngOnInit(): void {
-    this.gameConncetion.onMessage((playerId: string, message: string) => {
-      this.onMessageHandler(playerId, message);
-    });
+    this.subscriptions.add(
+      this.gameConncetion.onMessage()
+        .subscribe(chatMessage => this.pushMessage(chatMessage)));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   public enterHandler(): void {
@@ -35,33 +42,25 @@ export class ChatComponent implements OnInit {
       return;
     }
 
-    const chatMessage: ChatMessageModel = {
+    const chatMessage: ChatMessage = {
       playerName: this.currentPlayer.name,
       playerId: this.currentPlayer.id,
       message: this.messageValue
     }
 
     this.pushMessage(chatMessage);
-    this.gameConncetion.sendMessage(chatMessage.message);
+    this.gameConncetion.sendMessage(chatMessage.message)
+      .catch(error => {
+        this.alertSerivce.showAlert({
+          type: 'danger',
+          text: 'An error occured'
+        });
+        this.chatMessages = this.chatMessages.filter(message => message != chatMessage);
+      });
     this.messageValue = '';
   }
 
-  private onMessageHandler(playerId: string, message: string) {
-    this.connectedPlayers.forEach(player => {
-      if (player.id === playerId) {
-
-        const chatMessage: ChatMessageModel = {
-          playerName: player.name,
-          playerId: playerId,
-          message
-        }
-    
-        this.pushMessage(chatMessage);
-      }
-    });
-  }
-
-  private pushMessage(chatMessage: ChatMessageModel): void {
+  private pushMessage(chatMessage: ChatMessage): void {
     this.chatMessages.push(chatMessage);
     const scrollToBottomTimeOut = setTimeout(() => {
         this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;

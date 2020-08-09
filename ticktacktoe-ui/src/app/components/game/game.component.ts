@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
 import { PlayerStorageService } from 'src/app/services/player-storage.service';
 import { PlayerModel } from 'src/app/models/player.model';
 import { v1 as uuid } from 'uuid';
@@ -9,6 +9,7 @@ import { DialogService } from 'src/app/services/dialog.service';
 import { RoundResult } from 'src/app/types/round-result';
 import { LinePosition } from 'src/app/types/line-position';
 import { AlertService } from 'src/app/services/alert.service';
+import { Subscription } from 'rxjs';
 
 
 const RoundResultToLinePositionMap = new Map<RoundResult, LinePosition>();
@@ -26,7 +27,7 @@ RoundResultToLinePositionMap.set(RoundResult.InverseDiagonal, 'inv-diag');
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
 
   @ViewChild('link') linkInput;
 
@@ -43,6 +44,8 @@ export class GameComponent implements OnInit {
   public gameConnection: GameConnection;
 
   public gameState: GameState;
+  
+  private subscriptions = new Subscription();
 
   constructor(
     private playerStorageService: PlayerStorageService,
@@ -54,6 +57,10 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void {
     this.processPlayerInfoFromStorage();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   public playHandler() {
@@ -81,7 +88,15 @@ export class GameComponent implements OnInit {
 
     board[fieldPosition] = this.gameState.currentPlayer.move;
 
-    this.gameConnection.doMove(fieldPosition);
+    this.gameConnection.doMove(fieldPosition).catch(() => {
+
+      this.alertService.showAlert({
+        type: 'danger',
+        text: 'Unexpected error occured'
+      });
+
+      board[fieldPosition] = "";
+    });
   }
 
   public lineDrawnHandler() {
@@ -111,59 +126,71 @@ export class GameComponent implements OnInit {
   private connectToGame (player: PlayerModel): void {
     this.gameConnection = this.gamesService.getGameConnection(this.gameId, player.id, player.name);
 
-    this.gameConnection.onPlayersConnected(gameState => {
-      console.log('Players connected');
-      console.log(gameState);
-      this.alertService.showAlert({
-        type: 'success',
-        text: 'Players connected'
+    this.subscriptions.add(
+      this.gameConnection.onPlayersConnected().subscribe(gameState => {
+        console.log('Players connected');
+        console.log(gameState);
+        this.alertService.showAlert({
+          type: 'success',
+          text: 'Players connected'
+        })
+        this.gameState = {...gameState};
+
+
+        if (this.gameState.roundResult !== RoundResult.NotOver) {
+          this.dialogService.showDialog(
+            this.getDialogMessage(this.gameState.roundResult),
+            this.dialogAnswerHandler
+          );
+        }
       })
-      this.gameState = {...gameState};
+    );
 
-
-      if (this.gameState.roundResult !== RoundResult.NotOver) {
-        this.dialogService.showDialog(
-          this.getDialogMessage(this.gameState.roundResult),
-          this.dialogAnswerHandler
-        );
-      }
-    });
-
-    this.gameConnection.onPlayerDisconnected(() => {
-      console.log('Player disconnected');
-      this.alertService.showAlert({
-        type: 'warning',
-        text: 'Player disconnected'
+    this.subscriptions.add(
+      this.gameConnection.onPlayerDisconnected().subscribe(() => {
+        console.log('Player disconnected');
+        this.alertService.showAlert({
+          type: 'warning',
+          text: 'Player disconnected'
+        })
       })
-    });
+    );
 
-    this.gameConnection.onMoveResult(moveResult => {
-      console.log(moveResult);
-
-      this.gameState = {...this.gameState, ...moveResult};
-
-      if (this.gameState.roundResult === RoundResult.Draw) {
-        this.dialogService.showDialog(
-          this.getDialogMessage(this.gameState.roundResult),
-          this.dialogAnswerHandler
-        );
-      }
-    })
-
-    this.gameConnection.onNextRound(nextRound => {
-      console.log(nextRound);
-      this.gameState = {...this.gameState, ...nextRound};
-    })
-
-    this.gameConnection.onGameOver(() => {
-      console.log("Game is over");
-      this.alertService.showAlert({
-        type: 'warning',
-        text: 'Game is over'
+    this.subscriptions.add(
+      this.gameConnection.onMoveResult().subscribe(moveResult => {
+        console.log(moveResult);
+  
+        this.gameState = {...this.gameState, ...moveResult};
+  
+        if (this.gameState.roundResult === RoundResult.Draw) {
+          this.dialogService.showDialog(
+            this.getDialogMessage(this.gameState.roundResult),
+            this.dialogAnswerHandler
+          );
+        }
       })
-      this.gameConnection.close();
-      this.gameEnded.emit();
-    });
+    );
+
+    this.subscriptions.add(
+      this.gameConnection.onNextRound().subscribe(nextRound => {
+        console.log(nextRound);
+        this.gameState = {...this.gameState, ...nextRound};
+      })
+    );
+
+    this.subscriptions.add(
+      this.gameConnection.onGameOver().subscribe(() => {
+        console.log("Game is over");
+        this.gameConnection.stop()
+          .then(() => {
+            this.alertService.showAlert({
+              type: 'warning',
+              text: 'Game is over'
+            });
+            this.gameEnded.emit();
+          });
+      })
+    );
 
     this.gameConnection.onClose(() => {
       console.log('Connection closed');
@@ -173,23 +200,22 @@ export class GameComponent implements OnInit {
       })
     });
 
-    this.gameConnection.start(
-      () => {
+    this.gameConnection.start()
+      .then(() => {
         console.log('Connection started')
         this.alertService.showAlert({
           type: 'success',
           text: 'Connected'
         })
         this.currentClientPlayer = player;
-      },
-      error => {
+      })
+      .catch(error => {
         console.log(error);
         this.alertService.showAlert({
           type: 'danger',
           text: 'An error occured'
         })
-      }
-    );
+      });
   }
 
   private processPlayerInfoFromStorage() : void {
@@ -210,9 +236,10 @@ export class GameComponent implements OnInit {
   }
 
   private dialogAnswerHandler(answer: boolean): void {
-    this.gameConnection.voteForRound(answer);
-    if (!answer) {
-      this.gameEnded.emit();
-    }
+    this.gameConnection.voteForRound(answer).then(() => {
+      if (!answer) {
+        this.gameEnded.emit();
+      }
+    });
   }
 }

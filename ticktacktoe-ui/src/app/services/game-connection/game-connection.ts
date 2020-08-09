@@ -2,11 +2,12 @@ import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { GameState } from './game-state';
 import { MoveResultGameState } from './move-result-game-state';
 import { NextRoundGameState } from './next-round-game-state';
-import { ChatMessageModel } from '../../models/chat-message.mode';
+import { ChatMessage } from './chat-message';
+import { Observable, Subscriber } from 'rxjs';
 
 export class GameConnection {
 
-  private GameEvent = {
+  private GameEvents = {
     PLAYERS_CONNECTED: 'PlayersConnected',
     PLAYER_DISCONNECTED: 'PlayerDisconnected',
     MOVE_RESULT: 'MoveResult',
@@ -15,80 +16,97 @@ export class GameConnection {
     MESSAGE: 'Message'
   }
 
+  private GameActions = {
+    DO_MOVE: 'DoMove',
+    VOTE_FOR_ROUND: 'VoteForRound',
+    SEND: 'Send'
+  }
+
   private connection: HubConnection;
-  private errorHandler: (error: any) => void = (error) => console.error(error);
 
   constructor(
     private hostUrl: string,
     private gameId: string,
     private playerId: string,
     private playerName: string) {
-      this.connection = new HubConnectionBuilder()
+    this.connection = new HubConnectionBuilder()
       .withUrl(`${this.hostUrl}/game?gameId=${this.gameId}&playerName=${this.playerName}&playerID=${this.playerId}`)
       .build();
-    }
-
-  public doMove(fieldPosition: number): void {
-    this.connection.invoke('DoMove', fieldPosition)
-      .catch(this.errorHandler);
   }
 
-  public voteForRound(vote: boolean): void {
-    this.connection.invoke('VoteForRound', vote)
-      .catch(this.errorHandler);
+  public doMove(fieldPosition: number): Promise<any> {
+    return this.connection.invoke(this.GameActions.DO_MOVE, fieldPosition)
   }
 
-  public sendMessage(message: string): void {
-    this.connection.invoke('Send', message)
-      .catch(this.errorHandler);
+  public voteForRound(vote: boolean): Promise<any> {
+    return this.connection.invoke(this.GameActions.VOTE_FOR_ROUND, vote);
   }
 
-  public onPlayersConnected(callback: (gameState: GameState) => void): void {
-    this.connection.on(this.GameEvent.PLAYERS_CONNECTED, data => {
-      callback(data as GameState);
-    });
+  public sendMessage(message: string): Promise<any> {
+    return this.connection.invoke(this.GameActions.SEND, message);
   }
 
-  public onPlayerDisconnected(callback: () => void): void {
-    this.connection.on(this.GameEvent.PLAYER_DISCONNECTED, callback);
+  public onPlayersConnected(): Observable<GameState> {
+    return this.fromSignalREvent(this.GameEvents.PLAYERS_CONNECTED, (subscriber) =>
+      (data) => subscriber.next(data as GameState)
+    );
   }
 
-  public onMoveResult(callback: (moveResult: MoveResultGameState) => void) {
-    this.connection.on(this.GameEvent.MOVE_RESULT, data => {
-      callback(data as MoveResultGameState);
-    });
+  public onPlayerDisconnected(): Observable<void> {
+    return this.fromSignalREvent(this.GameEvents.PLAYER_DISCONNECTED, (subscriber) =>
+      () => subscriber.next()
+    );
   }
 
-  public onNextRound(callback: (nextRound: NextRoundGameState) => void) {
-    this.connection.on(this.GameEvent.NEXT_ROUND, data => {
-      callback(data as NextRoundGameState);
-    });
+  public onMoveResult(): Observable<MoveResultGameState> {
+    return this.fromSignalREvent(this.GameEvents.MOVE_RESULT, (subscriber) =>
+      (data) => subscriber.next(data as MoveResultGameState)
+    );
   }
 
-  public onMessage(callback: (playerId: string, message: string) => void) {
-    this.connection.on(this.GameEvent.MESSAGE, (playerId, message) => {
-      callback(playerId, message);
-    })
+  public onNextRound(): Observable<NextRoundGameState> {
+    return this.fromSignalREvent(this.GameEvents.NEXT_ROUND, (subscriber) =>
+      (data) => subscriber.next(data as NextRoundGameState)
+    );
   }
 
-  public onGameOver(callback: () => void): void {
-    this.connection.on(this.GameEvent.GAME_OVER, callback);
+  public onMessage(): Observable<ChatMessage> {
+    return this.fromSignalREvent(this.GameEvents.MESSAGE, (subscriber) =>
+      (data) => subscriber.next(data as ChatMessage)
+    );
   }
 
-  public onClose(callback: () => void) {
+  public onGameOver(): Observable<void> {
+    return this.fromSignalREvent(this.GameEvents.GAME_OVER, (subsrcirber) =>
+      () => subsrcirber.next());
+  }
+
+  public onClose(callback: (error?: Error) => void) {
     this.connection.onclose(callback);
   }
 
-  public start(callback?: () => void, error?: (error) => void): void {
-    if (error) {
-      this.errorHandler = error;
-    }
-    this.connection.start()
-      .then(callback? callback : () => console.log('Connected'))
-      .catch(this.errorHandler);
+  public start(): Promise<any> {
+    return this.connection.start();
   }
 
-  public close() {
-    this.connection.stop();
+  public stop(): Promise<any> {
+    return this.connection.stop();
   }
+
+  private fromSignalREvent<T>(gameEvent: string, evtHandlerBuilder: (subscriber: Subscriber<any>) => (...args: any[]) => void): Observable<T> {
+    return new Observable(subscriber => {
+
+      try {
+        const evtHandler = evtHandlerBuilder(subscriber);
+
+        this.connection.on(gameEvent, evtHandler);
+
+        return () => this.connection.off(gameEvent, evtHandler);
+      } catch (err) {
+        subscriber.error(err);
+      }
+
+    });
+  }
+
 }
