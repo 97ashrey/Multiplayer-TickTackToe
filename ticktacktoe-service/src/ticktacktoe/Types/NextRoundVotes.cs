@@ -32,9 +32,13 @@ namespace ticktacktoe.Types
             get {
                 VoteStatus status = VoteStatus.WaitingForVotes;
 
-                if (this.votes.Count == this.maxVoteCount)
+                if (this.votes.Count == this.maxVoteCount && this.votes.Values.All(value => value == true))
                 {
-                    status = votes.Values.All(value => value == true) ? VoteStatus.NextRound : VoteStatus.GameOver;
+                    status = VoteStatus.NextRound;
+                }
+                else if (this.votes.Values.Any(value => value == false))
+                {
+                    status = VoteStatus.GameOver;
                 }
 
                 return status;
