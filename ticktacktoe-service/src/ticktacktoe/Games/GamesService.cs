@@ -44,6 +44,11 @@ namespace ticktacktoe.Games
         {
             GameEntity game = this.GetGameExceptionaly(gameId);
 
+            if (game.NextRoundVotes.VoteStatus == VoteStatus.GameOver)
+            {
+                throw new GameException($"Game is over.");
+            }
+
             // Players connecting to the game for the first time
             if (game.Players.Count < MAX_PLAYERS_COUNT)
             {

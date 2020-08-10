@@ -143,11 +143,12 @@ export class GameComponent implements OnInit, OnDestroy {
           text: 'Players connected'
         })
 
-        this.spinner.hide();
-
+        
         if (this.gameState) {
           return;
         }
+        
+        this.spinner.hide();
 
         this.gameState = {...gameState};
 
@@ -167,7 +168,6 @@ export class GameComponent implements OnInit, OnDestroy {
           type: 'warning',
           text: 'Player disconnected'
         })
-        this.spinner.show();
       })
     );
 
@@ -202,7 +202,6 @@ export class GameComponent implements OnInit, OnDestroy {
               type: 'warning',
               text: 'Game is over'
             });
-            this.spinner.hide();
             this.gameEnded.emit();
           })
       })

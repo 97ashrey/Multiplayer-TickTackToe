@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Injectable, OnInit, OnDestroy } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DialogService {
+export class DialogService implements OnDestroy {
 
   private messageSource = new Subject<string>();
   private showDialogSource = new Subject<boolean>();
@@ -14,7 +15,19 @@ export class DialogService {
 
   private callback: (answer: boolean) => void = null;
 
-  constructor() { }
+  private subscriptions = new Subscription();
+
+  constructor(private router: Router) {
+    this.subscriptions.add(this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.closeDialog();
+      }
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 
   public callCallback(answer: boolean) {
     if (this.callback) {
