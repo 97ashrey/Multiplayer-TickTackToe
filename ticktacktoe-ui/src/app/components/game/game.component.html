@@ -1,12 +1,13 @@
 <div class="connectToGame" *ngIf="!gameState; else gameContainer">
     <div class="createPlayerContainer" *ngIf="!gameState; else gameContainer" >
         <input type="text" class="playerName green" [(ngModel)]="playerName" required>
-        <button class="success createPlayer" (click)="playHandler()">Play</button>
+        <button class="success createPlayer" (click)="playHandler()" [disabled]="gameConnection && gameConnection.connected()">Play</button>
     </div>
     <div class="gameLink">
         <input #link type="text" class="link green" readonly="true" [value]="gameUrl">
         <button class="success copyButton" (click)="copyClickHandler()">copy</button>
     </div>
+    <app-spinner message="Waiting for the other player"></app-spinner>
 </div>
 <ng-template #gameContainer>
     <div class="gameContainer">

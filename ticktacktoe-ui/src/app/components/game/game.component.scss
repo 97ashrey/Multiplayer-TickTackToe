@@ -54,19 +54,28 @@
     }
 }
 
-.gameInfoContainer {
-    height: 100px;
-    margin-bottom: 10px;
-}
-
 .gameContainer {
     width: 100%;
-    height: 500px;
+    height: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.gameInfoContainer {
+    flex: 0 0 100px;
+}
+
+.spinnerContainer {
+    position: relative;
+    flex: 0 0 200px;
+    border: 1px solid red;
 }
 
 .game {
     width: 100%;
-    height: calc(100% - 100px);
+    flex: 1;
     display: flex;
     flex-direction: column;
 
@@ -81,8 +90,12 @@
     }
 }
 
-
 @media screen and (min-width: 768px) {
+
+    .gameContainer {
+        height: 80%;
+    }
+
     .game {
         display: flex;
         flex-direction: row;

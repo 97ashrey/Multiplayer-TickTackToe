@@ -1,4 +1,4 @@
-import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
+import { HubConnectionBuilder, HubConnection, HubConnectionState } from '@aspnet/signalr';
 import { GameState } from './game-state';
 import { MoveResultGameState } from './move-result-game-state';
 import { NextRoundGameState } from './next-round-game-state';
@@ -39,7 +39,7 @@ export class GameConnection {
   }
 
   public voteForRound(vote: boolean): Promise<any> {
-    return this.connection.invoke(this.GameActions.VOTE_FOR_ROUND, vote);
+    return this.connection.send(this.GameActions.VOTE_FOR_ROUND, vote);
   }
 
   public sendMessage(message: string): Promise<any> {
@@ -91,6 +91,10 @@ export class GameConnection {
 
   public stop(): Promise<any> {
     return this.connection.stop();
+  }
+
+  public connected(): boolean {
+    return this.connection.state === HubConnectionState.Connected;
   }
 
   private fromSignalREvent<T>(gameEvent: string, evtHandlerBuilder: (subscriber: Subscriber<any>) => (...args: any[]) => void): Observable<T> {

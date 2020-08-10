@@ -2,4 +2,6 @@
     <span class="text">Tick Tack Toe</span>
 </div>
 
-<button class="success newGameButton" (click)="newGameClickHandler()">New Game</button>
+<button class="success newGameButton" (click)="newGameClickHandler()" [disabled]="newGameButtonDisabled">New Game</button>
+
+<app-spinner message="Creating new game"></app-spinner>
