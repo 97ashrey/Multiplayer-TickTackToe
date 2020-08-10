@@ -3,6 +3,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule }   from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
@@ -14,6 +16,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { AlertComponent } from './components/alert/alert.component';
 import { AlertContainerComponent } from './components/alert-container/alert-container.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -27,12 +30,15 @@ import { ChatComponent } from './components/chat/chat.component';
     AlertComponent,
     AlertContainerComponent,
     ChatComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    NgxSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

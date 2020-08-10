@@ -10,6 +10,7 @@ import { RoundResult } from 'src/app/types/round-result';
 import { LinePosition } from 'src/app/types/line-position';
 import { AlertService } from 'src/app/services/alert.service';
 import { Subscription } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 const RoundResultToLinePositionMap = new Map<RoundResult, LinePosition>();
@@ -51,7 +52,8 @@ export class GameComponent implements OnInit, OnDestroy {
     private playerStorageService: PlayerStorageService,
     private gamesService: GamesService,
     private dialogService: DialogService,
-    private alertService: AlertService) {
+    private alertService: AlertService,
+    private spinner: NgxSpinnerService) {
       this.dialogAnswerHandler = this.dialogAnswerHandler.bind(this);
     }
 
@@ -61,9 +63,14 @@ export class GameComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+    this.gameConnection.stop();
   }
 
   public playHandler() {
+    if (this.gameConnection && this.gameConnection.connected()) {
+      return;
+    }
+
     const player = this.createPlayer();
 
     if (player === null) {
@@ -131,11 +138,12 @@ export class GameComponent implements OnInit, OnDestroy {
         console.log('Players connected');
         console.log(gameState);
  
-
         this.alertService.showAlert({
           type: 'success',
           text: 'Players connected'
         })
+
+        this.spinner.hide();
 
         if (this.gameState) {
           return;
@@ -159,6 +167,7 @@ export class GameComponent implements OnInit, OnDestroy {
           type: 'warning',
           text: 'Player disconnected'
         })
+        this.spinner.show();
       })
     );
 
@@ -193,6 +202,7 @@ export class GameComponent implements OnInit, OnDestroy {
               type: 'warning',
               text: 'Game is over'
             });
+            this.spinner.hide();
             this.gameEnded.emit();
           })
       })
@@ -213,6 +223,7 @@ export class GameComponent implements OnInit, OnDestroy {
           type: 'success',
           text: 'Connected'
         })
+        this.spinner.show();
         this.currentClientPlayer = player;
       })
       .catch(error => {
@@ -244,8 +255,8 @@ export class GameComponent implements OnInit, OnDestroy {
   private dialogAnswerHandler(answer: boolean): void {
     this.gameConnection.voteForRound(answer).then(() => {
       if (!answer) {
-        this.gameConnection.stop().then(() => this.gameEnded.emit());
+        this.gameEnded.emit()
       }
-    });
+    }).catch(error => console.error('Uncaught error', error));
   }
 }
