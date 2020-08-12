@@ -1,27 +1,25 @@
 <ng-container *ngIf="thisClientPlayer && otherClientPlayer">
-    <ng-container 
-    *ngTemplateOutlet="playerInfo; context: thisClientPlayer"></ng-container>
-<div class="stats">
-    <div class="turn">
-        <ng-container *ngTemplateOutlet="checkBox; context: thisClientPlayer"></ng-container>
-        <ng-container *ngTemplateOutlet="checkBox; context: otherClientPlayer"></ng-container>
+    <ng-container *ngTemplateOutlet="playerInfo; context: thisClientPlayer"></ng-container>
+    <div class="stats">
+        <div class="turn">
+            <ng-container *ngTemplateOutlet="checkBox; context: thisClientPlayer"></ng-container>
+            <ng-container *ngTemplateOutlet="checkBox; context: otherClientPlayer"></ng-container>
+        </div>
+        <div class="round">
+            <span>Round</span>
+            <span class="value">{{round}}</span>
+        </div>
     </div>
-    <div class="round">
-        <span>Round</span>
-        <span class="value">{{round}}</span>
-    </div>
-</div>
-<ng-container 
-    *ngTemplateOutlet="playerInfo; context: otherClientPlayer"></ng-container>
+    <ng-container *ngTemplateOutlet="playerInfo; context: otherClientPlayer"></ng-container>
 </ng-container>
 
 <ng-template #playerInfo let-name="name" let-move="move" let-score="score" let-connected="connected">
     <div class="playerInfo">
-        <div>
-            <span>{{name}}</span>
-            &nbsp;
-            <span>{{move}}</span>
-            &nbsp;
+        <div class="player">
+            <span class="name">{{name}}</span>
+            <span class="move">{{move}}</span>
+        </div>
+        <div class="connected">
             <span>{{connected? 'connected': 'disconnected'}}</span>
         </div>
         <span class="scoreValue">{{score}}</span>
@@ -29,8 +27,6 @@
 </ng-template>
 
 <ng-template #checkBox let-id="id" let-move="move">
-    <div class="checkBox" 
-        [class.checked]="id === currentPlayerId"
-        [class.playerx]="move === 'X'"
+    <div class="checkBox" [class.checked]="id === currentPlayerId" [class.playerx]="move === 'X'"
         [class.playero]="move === 'O'"></div>
 </ng-template>
