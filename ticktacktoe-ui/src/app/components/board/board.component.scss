@@ -36,7 +36,7 @@ $dark-o-color: darken($color: $o-color, $amount: 10);
         cursor: not-allowed;
     }
 
-    &[thisClientTurn="true"]{
+    &[thisClientTurn="true"][otherClientConnected="true"]{
         &[value=""] {
             &:hover {
                 cursor: pointer;

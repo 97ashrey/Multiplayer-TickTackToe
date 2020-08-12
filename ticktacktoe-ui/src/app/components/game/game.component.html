@@ -24,7 +24,6 @@
                     [board]="gameState.board" 
                     [currentPlayerMove]="gameState.currentPlayer.move" 
                     [currentPlayerId]="gameState.currentPlayer.id"
-                    [thisClientPlayerId]="currentClientPlayer.id"
                     [linePosition]="linePositionMap.get(gameState.roundResult)"
                     (fieldClicked)="fieldClickHandler($event)"
                     (lineDrawn)="lineDrawnHandler()"
