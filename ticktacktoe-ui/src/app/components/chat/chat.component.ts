@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { GameConnection } from 'src/app/services/game-connection/game-connection';
 import { PlayerModel } from 'src/app/models/player.model';
 import { ChatMessage } from 'src/app/services/game-connection/chat-message';
-import { Player } from 'src/app/services/game-connection/player';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/services/alert.service';
 

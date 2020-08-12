@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
 import { PlayerStorageService } from 'src/app/services/player-storage.service';
+import { PlayersConnectionService } from 'src/app/services/players-connection.service';
 import { PlayerModel } from 'src/app/models/player.model';
 import { v1 as uuid } from 'uuid';
 import { GamesService } from 'src/app/services/games.service';
@@ -50,6 +51,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   constructor(
     private playerStorageService: PlayerStorageService,
+    private playersConnectionService: PlayersConnectionService,
     private gamesService: GamesService,
     private dialogService: DialogService,
     private alertService: AlertService,
@@ -142,15 +144,16 @@ export class GameComponent implements OnInit, OnDestroy {
           type: 'success',
           text: 'Players connected'
         })
-
         
         if (this.gameState) {
+          this.playersConnectionService.updatePlayers(...this.gameState.players);
           return;
         }
         
         this.spinner.hide();
 
         this.gameState = {...gameState};
+        this.playersConnectionService.updatePlayers(...this.gameState.players);
 
         if (this.gameState.roundResult !== RoundResult.NotOver) {
           this.dialogService.showDialog(
@@ -162,8 +165,9 @@ export class GameComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.add(
-      this.gameConnection.onPlayerDisconnected().subscribe(() => {
+      this.gameConnection.onPlayerDisconnected().subscribe(player => {
         console.log('Player disconnected');
+        this.playersConnectionService.updatePlayers(player);
         this.alertService.showAlert({
           type: 'warning',
           text: 'Player disconnected'
@@ -176,6 +180,8 @@ export class GameComponent implements OnInit, OnDestroy {
         console.log(moveResult);
   
         this.gameState = {...this.gameState, ...moveResult};
+
+        this.playersConnectionService.updatePlayers(...this.gameState.players);
   
         if (this.gameState.roundResult === RoundResult.Draw) {
           this.dialogService.showDialog(
@@ -190,6 +196,8 @@ export class GameComponent implements OnInit, OnDestroy {
       this.gameConnection.onNextRound().subscribe(nextRound => {
         console.log(nextRound);
         this.gameState = {...this.gameState, ...nextRound};
+
+        this.playersConnectionService.updatePlayers(...this.gameState.players);
       })
     );
 
@@ -218,11 +226,14 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gameConnection.start()
       .then(() => {
         console.log('Connection started')
+        this.playersConnectionService.setCurrentPlayerId(player.id);
+        
         this.alertService.showAlert({
           type: 'success',
           text: 'Connected'
         })
         this.spinner.show();
+
         this.currentClientPlayer = player;
       })
       .catch(error => {

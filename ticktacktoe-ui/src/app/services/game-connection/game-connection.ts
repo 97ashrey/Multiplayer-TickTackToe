@@ -4,6 +4,7 @@ import { MoveResultGameState } from './move-result-game-state';
 import { NextRoundGameState } from './next-round-game-state';
 import { ChatMessage } from './chat-message';
 import { Observable, Subscriber } from 'rxjs';
+import { Player } from './player';
 
 export class GameConnection {
 
@@ -52,9 +53,9 @@ export class GameConnection {
     );
   }
 
-  public onPlayerDisconnected(): Observable<void> {
+  public onPlayerDisconnected(): Observable<Player> {
     return this.fromSignalREvent(this.GameEvents.PLAYER_DISCONNECTED, (subscriber) =>
-      () => subscriber.next()
+      (data) => subscriber.next(data as Player)
     );
   }
 

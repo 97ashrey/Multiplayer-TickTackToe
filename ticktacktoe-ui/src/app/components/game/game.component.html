@@ -13,9 +13,7 @@
     <div class="gameContainer">
         <div class="gameInfoContainer">
             <app-game-info
-                [players]="gameState.players"
-                [currentPlayer]="gameState.currentPlayer"
-                [thisClientPlayerId]="currentClientPlayer.id"
+                [currentPlayerId]="gameState.currentPlayer.id"
                 [score]="gameState.score"
                 [round]="gameState.round"
             ></app-game-info>

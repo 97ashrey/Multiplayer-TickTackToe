@@ -1,10 +1,6 @@
-<ng-container 
-    *ngTemplateOutlet="playerInfo;context: 
-    {   
-        name: thisClientPlayer.name, 
-        move: thisClientPlayer.move, 
-        score: score[thisClientPlayer.id]
-    }"></ng-container>
+<ng-container *ngIf="thisClientPlayer && otherClientPlayer">
+    <ng-container 
+    *ngTemplateOutlet="playerInfo; context: thisClientPlayer"></ng-container>
 <div class="stats">
     <div class="turn">
         <ng-container *ngTemplateOutlet="checkBox; context: thisClientPlayer"></ng-container>
@@ -16,19 +12,17 @@
     </div>
 </div>
 <ng-container 
-    *ngTemplateOutlet="playerInfo;context: 
-    {   
-        name: otherClientPlayer.name, 
-        move: otherClientPlayer.move, 
-        score: score[otherClientPlayer.id]
-    }"></ng-container>
+    *ngTemplateOutlet="playerInfo; context: otherClientPlayer"></ng-container>
+</ng-container>
 
-<ng-template #playerInfo let-name="name" let-move="move" let-score="score">
+<ng-template #playerInfo let-name="name" let-move="move" let-score="score" let-connected="connected">
     <div class="playerInfo">
         <div>
             <span>{{name}}</span>
             &nbsp;
             <span>{{move}}</span>
+            &nbsp;
+            <span>{{connected? 'connected': 'disconnected'}}</span>
         </div>
         <span class="scoreValue">{{score}}</span>
     </div>
@@ -36,7 +30,7 @@
 
 <ng-template #checkBox let-id="id" let-move="move">
     <div class="checkBox" 
-        [class.checked]="id === currentPlayer.id"
+        [class.checked]="id === currentPlayerId"
         [class.playerx]="move === 'X'"
         [class.playero]="move === 'O'"></div>
 </ng-template>
