@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { Player } from 'src/app/services/game-connection/player';
 import { PlayersConnectionService } from 'src/app/services/players-connection.service';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 interface PlayerWithScore {
   id: string;
@@ -31,14 +32,16 @@ export class GameInfoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.add(
-      this.playersConnectionService.thisClientPlayer$.subscribe(player => {
+      this.playersConnectionService.getThisClientPlayer()
+      .subscribe(player => {
         const score = this.score[player.id];
         this.thisClientPlayer = {...player, score};
       })
     );
 
     this.subscriptions.add(
-      this.playersConnectionService.otherClientPlayer$.subscribe(player => {
+      this.playersConnectionService.getOtherClientPlayer()
+      .subscribe(player => {
         const score = this.score[player.id];
         this.otherClientPlayer = {...player, score};
       })

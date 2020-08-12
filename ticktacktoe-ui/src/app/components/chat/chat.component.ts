@@ -36,7 +36,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         .subscribe(chatMessage => this.pushMessage(chatMessage)));
 
     this.subscriptions.add(
-      this.playersConnectionService.otherClientPlayer$
+      this.playersConnectionService.getOtherClientPlayer()
         .subscribe(player => this.otherClientConnected = player.connected)
     );
   }

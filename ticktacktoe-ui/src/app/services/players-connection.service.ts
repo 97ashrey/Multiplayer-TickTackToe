@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Player } from './game-connection/player';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,12 +11,20 @@ export class PlayersConnectionService {
   private thisClientPlayerSource = new BehaviorSubject<Player>(null);
   private otherClientPlayerSource = new BehaviorSubject<Player>(null);
 
-  public thisClientPlayer$ = this.thisClientPlayerSource.asObservable();
-  public otherClientPlayer$ = this.otherClientPlayerSource.asObservable();
+  private thisClientPlayer$ = this.thisClientPlayerSource.asObservable();
+  private otherClientPlayer$ = this.otherClientPlayerSource.asObservable();
 
   private thisClientPlayerId: string;
 
   constructor() { }
+
+  public getThisClientPlayer(): Observable<Player> {
+    return this.thisClientPlayer$.pipe(filter(player => !!player));
+  }
+
+  public getOtherClientPlayer(): Observable<Player> {
+    return this.otherClientPlayer$.pipe(filter(player => !!player));
+  }
 
   public setCurrentPlayerId(thisClientPlayerId: string): void {
     this.thisClientPlayerId = thisClientPlayerId;

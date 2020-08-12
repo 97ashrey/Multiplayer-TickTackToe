@@ -41,14 +41,14 @@ export class BoardComponent implements OnInit, OnDestroy {
   constructor(private playersConnectionService: PlayersConnectionService) { }
 
   ngOnInit(): void {
-    this.playersConnectionService.thisClientPlayer$
+    this.playersConnectionService.getThisClientPlayer()
       .pipe(take(1))
       .subscribe(player => {
       this.thisClientPlayerId = player.id;
     });
 
     this.subscriptions.add(
-      this.playersConnectionService.otherClientPlayer$
+      this.playersConnectionService.getOtherClientPlayer()
         .subscribe(player => this.otherClientConnected = player.connected)
     ); 
   }
