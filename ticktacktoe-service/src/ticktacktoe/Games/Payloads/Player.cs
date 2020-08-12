@@ -12,5 +12,7 @@ namespace ticktacktoe.Games.Payloads
         public string Name { get; set; }
 
         public string Move { get; set; }
+
+        public bool Connected { get; set; }
     }
 }

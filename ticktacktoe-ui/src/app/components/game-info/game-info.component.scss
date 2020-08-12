@@ -13,29 +13,76 @@ $number-color: white;
     padding: 10px;
 }
 
-.playerInfo, .stats {
-    flex: 1;
-    height: 100%;
-}
+$stats-width: 120px;
+$move-width: 30px;
 
 .playerInfo {
+    width: calc((100% - #{$stats-width})/2);
+    height: 100%;
+
     text-transform: uppercase;
+
+    .player {
+        width: 100%;
+    
+        display: flex;
+        align-items: center;
+      
+        .name {
+            max-width: calc(100% - #{$move-width});
+            min-width: auto;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .move {
+            width: $move-width;
+            text-align: center;
+        }
+    }
+
     &:last-child {
         text-align: right;
+
+        .player {
+            flex-direction: row-reverse;
+        }
+    }
+
+    .connected{
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .scoreValue {
+        display: inline-block;
+        margin-top: 10px;
+
         color: $number-color;
         font-size: 2em;
     }
 }
 
 .stats {
+    width: $stats-width;
+    height: 100%;
+
     text-align: center;
     display: flex;
     flex-direction: column;
+    
+    .turn {
+        display: flex;
+        justify-content: space-around;
+    }
 
     .round {
+        margin-top: 10px;
+
         display: flex;
         flex-direction: column;
 
@@ -45,11 +92,6 @@ $number-color: white;
             font-size: 1.3em;
         }
     }
-}
-
-.turn {
-    display: flex;
-    justify-content: space-around;
 }
 
 $check-box-size: 40px;

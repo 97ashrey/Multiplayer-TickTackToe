@@ -2,9 +2,9 @@ import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { GameConnection } from 'src/app/services/game-connection/game-connection';
 import { PlayerModel } from 'src/app/models/player.model';
 import { ChatMessage } from 'src/app/services/game-connection/chat-message';
-import { Player } from 'src/app/services/game-connection/player';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/services/alert.service';
+import { PlayersConnectionService } from 'src/app/services/players-connection.service';
 
 @Component({
   selector: 'app-chat',
@@ -22,14 +22,23 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   public messageValue = "";
 
+  public otherClientConnected: boolean;
+
   private subscriptions = new Subscription;
 
-  constructor(private alertSerivce: AlertService) { }
+  constructor(
+    private alertSerivce: AlertService,
+    private playersConnectionService: PlayersConnectionService) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
       this.gameConncetion.onMessage()
         .subscribe(chatMessage => this.pushMessage(chatMessage)));
+
+    this.subscriptions.add(
+      this.playersConnectionService.getOtherClientPlayer()
+        .subscribe(player => this.otherClientConnected = player.connected)
+    );
   }
 
   ngOnDestroy(): void {

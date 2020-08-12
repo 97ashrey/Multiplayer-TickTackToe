@@ -106,7 +106,7 @@ namespace ticktacktoe.Games
             };
         }
 
-        public PlayerDisconectedResult DisconectPlayer(string gameId, string playerId)
+        public Player DisconectPlayer(string gameId, string playerId)
         {
             GameEntity game = this.GetGameExceptionaly(gameId);
 
@@ -121,11 +121,7 @@ namespace ticktacktoe.Games
 
             this.gamesRepository.Update(game);
 
-            return new PlayerDisconectedResult()
-            {
-                VoteStatus = game.NextRoundVotes.VoteStatus,
-                RoundResult = game.RoundResult
-            };
+            return this.mapper.Map<Player>(playerToDisconect);
         }
 
         public string Create()

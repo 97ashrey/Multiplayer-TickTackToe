@@ -86,15 +86,10 @@ namespace ticktacktoe.Hubs
         {
             DisconnectFromGameRequest request = this.GetDisconnectFromGameRequest();
 
-            PlayerDisconectedResult result = this.gamesService.DisconectPlayer(request.GameId, request.PlayerId);
+            Player disconectedPlayer = this.gamesService.DisconectPlayer(request.GameId, request.PlayerId);
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, request.GameId);
-            await Clients.Group(request.GameId).SendAsync("PlayerDisconnected");
-
-            if (result.RoundResult != RoundResult.NotOver && result.VoteStatus == VoteStatus.GameOver)
-            {
-                this.gamesService.Delete(request.GameId);
-            }
+            await Clients.Group(request.GameId).SendAsync("PlayerDisconnected", disconectedPlayer);
 
             await base.OnDisconnectedAsync(exception);
         }
