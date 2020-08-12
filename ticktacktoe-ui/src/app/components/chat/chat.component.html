@@ -4,7 +4,7 @@
     </ng-container>
  </div>
  <div class="inputContainer">
-     <input type="text" [(ngModel)]="messageValue" (keydown.enter)="enterHandler()"/>
+     <input type="text" [(ngModel)]="messageValue" (keydown.enter)="enterHandler()" [disabled]="!otherClientConnected"/>
  </div>
 
 

@@ -4,6 +4,7 @@ import { PlayerModel } from 'src/app/models/player.model';
 import { ChatMessage } from 'src/app/services/game-connection/chat-message';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/services/alert.service';
+import { PlayersConnectionService } from 'src/app/services/players-connection.service';
 
 @Component({
   selector: 'app-chat',
@@ -21,14 +22,23 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   public messageValue = "";
 
+  public otherClientConnected: boolean;
+
   private subscriptions = new Subscription;
 
-  constructor(private alertSerivce: AlertService) { }
+  constructor(
+    private alertSerivce: AlertService,
+    private playersConnectionService: PlayersConnectionService) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
       this.gameConncetion.onMessage()
         .subscribe(chatMessage => this.pushMessage(chatMessage)));
+
+    this.subscriptions.add(
+      this.playersConnectionService.otherClientPlayer$
+        .subscribe(player => this.otherClientConnected = player.connected)
+    );
   }
 
   ngOnDestroy(): void {

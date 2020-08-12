@@ -19,6 +19,8 @@ namespace ticktacktoe.Games.Payloads
 
         public RoundResult RoundResult { get; set; }
 
+        public int Round { get; set; }
+
         public Score Score { get; set; }
     }
 }
