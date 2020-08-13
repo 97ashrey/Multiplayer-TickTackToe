@@ -33,8 +33,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   public line: LinePosition;
 
-  public thisClientPlayerId: string;
-  public otherClientConnected: boolean;
+  public thisClientPlayerId: string = '1';
+  public otherClientConnected: boolean = true;
 
   private subscriptions = new Subscription();
 
@@ -61,6 +61,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (this.otherClientConnected) {
       this.fieldClicked.emit(fieldPosition);
     }
+  }
+
+  public trackBoardValue(index, value) {
+    return index + value;
   }
 
 }
