@@ -5,11 +5,7 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{79654BB3-7882-4FA4-869A-FB66842DB91D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{94F60427-69DD-458D-BE58-19E9E76C855C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ticktacktoe", "src\ticktacktoe\ticktacktoe.csproj", "{8D65E222-6F8D-4935-B85B-524A45724ED8}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ticktacktoe_tests", "tests\ticktacktoe_tests\ticktacktoe_tests.csproj", "{AF144A5F-E854-48BE-A507-F454E01C71EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,17 +17,12 @@ Global
 		{8D65E222-6F8D-4935-B85B-524A45724ED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D65E222-6F8D-4935-B85B-524A45724ED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D65E222-6F8D-4935-B85B-524A45724ED8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF144A5F-E854-48BE-A507-F454E01C71EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF144A5F-E854-48BE-A507-F454E01C71EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF144A5F-E854-48BE-A507-F454E01C71EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF144A5F-E854-48BE-A507-F454E01C71EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8D65E222-6F8D-4935-B85B-524A45724ED8} = {79654BB3-7882-4FA4-869A-FB66842DB91D}
-		{AF144A5F-E854-48BE-A507-F454E01C71EF} = {94F60427-69DD-458D-BE58-19E9E76C855C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {886C9348-645E-4490-8324-05442A5DFCD5}
